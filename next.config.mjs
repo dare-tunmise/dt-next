@@ -1,9 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
-  // If you use images from external domains
   images: {
-    domains: ['your-api-domain.com'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**', // This allows images from any secure domain
+      },
+    ],
   },
 };
 

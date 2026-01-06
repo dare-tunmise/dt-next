@@ -7,15 +7,15 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 
 export default function Login() {
-  const { user, login } = useAuth();
+  const { user, login, loading } = useAuth();
   // 2. Initialize the Next.js router
   const router = useRouter(); 
 
   useEffect(() => {
-    if (user) {
+    if (!loading && user) {
       router.push('/admin/dashboard'); 
     }
-  }, [user, router]);
+  }, [user, loading, router]);
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">

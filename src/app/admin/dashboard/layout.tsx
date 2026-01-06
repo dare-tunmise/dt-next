@@ -19,9 +19,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     }
   }, [user, loading, router]);
 
-  if (loading || !user) {
-    return <div className="min-h-screen flex items-center justify-center">Authenticating...</div>;
-  }
+  // if (loading || !user) {
+  //   return <div className="min-h-screen flex items-center justify-center">Authenticating...</div>;
+  // }
+
+  if (loading) return <div>Loading...</div>; // Prevents the loop
+  if (!user) return null;
 
   return (
     <div className="min-h-screen bg-background">
