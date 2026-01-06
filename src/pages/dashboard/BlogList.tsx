@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 
 interface Blog {
-  _id: string; // Backend uses _id not id
+  _id?: string; // Backend uses _id not id
   title: string;
   slug: string;
   category: 'writings' | 'projects';
@@ -28,7 +28,7 @@ export default function BlogList() {
   const fetchBlogs = async () => {
     try {
       const data = await api.dashboard.getAllBlogs();
-      setBlogs(data.blogs); // Changed from data to data.blogs
+      setBlogs(data.blogs as Blog[]); // Changed from data to data.blogs
     } catch (error) {
       toast({
         title: 'Error',
@@ -118,14 +118,14 @@ const handleTogglePublish = async (id: string, currentStatus: boolean) => {
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => handleTogglePublish(blog._id, blog.published)}
+                  onClick={() => handleTogglePublish(blog._id!, blog.published)}
                 >
                   {blog.published ? 'Unpublish' : 'Publish'}
                 </Button>
                 <Button
                   variant="destructive"
                   size="sm"
-                  onClick={() => handleDelete(blog._id)}
+                  onClick={() => handleDelete(blog._id!)}
                 >
                   Delete
                 </Button>
