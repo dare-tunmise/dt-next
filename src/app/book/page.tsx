@@ -1,5 +1,42 @@
+import { Metadata } from "next";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+
+export const metadata: Metadata = {
+  title: "A Failed Attempt at Undoing Memories",
+  description: "Explore 'A failed attempt at undoing memories' by Dare Tunmise. Edited by Kwame Dawes and Chris Abani, published by the African Poetry Book Fund.",
+  keywords: [
+    "Dare Tunmise", 
+    "A failed attempt at undoing memories", 
+    "African Poetry Book Fund", 
+    "Kwame Dawes", 
+    "Chris Abani", 
+    "African poetry",
+    "African poetry Book Fund", 
+    "Akashic Books"
+  ],
+  openGraph: {
+    title: "A Failed Attempt at Undoing Memories by Dare Tunmise",
+    description: "A poetry collection exploring memory's complexity and resilience.",
+    url: "https://www.daretunmise.com/book",
+    type: "book",
+    images: [
+      {
+        url: "https://m.media-amazon.com/images/S/aplus-media-library-service-media/b6f4bccb-7e88-4b72-8835-1fcf2b2cf838.__CR0,0,300,300_PT0_SX300_V1___.jpg",
+        width: 300,
+        height: 300,
+        alt: "Book Cover - A failed attempt at undoing memories",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary",
+    title: "A Failed Attempt at Undoing Memories",
+    description: "New poetry from Dare Tunmise, edited by Kwame Dawes and Chris Abani.",
+    images: ["https://m.media-amazon.com/images/S/aplus-media-library-service-media/b6f4bccb-7e88-4b72-8835-1fcf2b2cf838.__CR0,0,300,300_PT0_SX300_V1___.jpg"],
+  },
+};
+
 
 const Book = () => {
   return (
