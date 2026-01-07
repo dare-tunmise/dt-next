@@ -6,12 +6,17 @@ interface ProjectCardProps {
   slug: string;
 }
 
+// const stripHtml = (html: string) => {
+//   const tmp = document.createElement('div');
+//   tmp.innerHTML = html;
+//   return tmp.textContent || tmp.innerText || '';
+// };
 const stripHtml = (html: string) => {
-  const tmp = document.createElement('div');
-  tmp.innerHTML = html;
-  return tmp.textContent || tmp.innerText || '';
+  return html
+    .replace(/<[^>]*>?/gm, '') 
+    .replace(/&nbsp;/g, ' ')  
+    .replace(/&amp;/g, '&');
 };
-
 
 
 const ProjectCard = ({ title, excerpt, slug }: ProjectCardProps) => {

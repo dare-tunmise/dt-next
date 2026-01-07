@@ -75,7 +75,7 @@ const About = () => {
           </ul>
 
           <p className="leading-relaxed mt-4 mb-6">
-            Projects typically start from $3,000, depending on scope.
+            project minimum typically starts at $3,000, with final pricing based on scope and complexity.
           </p>
 
           <h2 className="text-2xl font-bold mb-4 mt-12">Get in Touch</h2>

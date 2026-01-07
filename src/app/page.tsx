@@ -1,45 +1,26 @@
-'use client';
-
-import { useEffect, useState } from "react";
-import Link from 'next/link'
-import Header from "@/components/Header";
+import { Metadata } from "next";
+import Link from 'next/link';
 import Footer from "@/components/Footer";
 import BlogCard from "@/components/BlogCard";
 import ProjectCard from "@/components/ProjectCard";
 import { api, Blog } from "@/lib/api";
 
 
-const Index = () => {
-  const [recentWritings, setRecentWritings] = useState<Blog[]>([]);
-  const [recentProjects, setRecentProjects] = useState<Blog[]>([]);
-  const [loading, setLoading] = useState(true);
+export default async function Index() {
+let recentWritings: Blog[] = [];
+  let recentProjects: Blog[] = [];
 
-  useEffect(() => {
-    loadContent();
-  }, []);
-
-  const loadContent = async () => {
-    try {
-      // Fetch recent writings (limit 3)
-      const writingsData = await api.blogs.getByCategory('writings', 1, 3);
-      setRecentWritings(writingsData.blogs);
-
-      // Fetch recent projects (limit 2)
-      const projectsData = await api.blogs.getByCategory('projects', 1, 2);
-      setRecentProjects(projectsData.blogs);
-    } catch (error) {
-      console.error('Failed to load content:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-muted-foreground">Loading...</div>
-      </div>
-    );
+  try {
+    // Fetch data directly on server
+    const [writingsData, projectsData] = await Promise.all([
+      api.blogs.getByCategory('writings', 1, 3),
+      api.blogs.getByCategory('projects', 1, 2)
+    ]);
+    
+    recentWritings = writingsData.blogs || [];
+    recentProjects = projectsData.blogs || [];
+  } catch (error) {
+    console.error('Failed to load home content:', error);
   }
 
   return (
@@ -96,7 +77,7 @@ const Index = () => {
                 <BlogCard 
                   key={writing._id} 
                   title={writing.title}
-                  excerpt={writing.body.substring(0, 150) + '...'}
+                  excerpt={writing.body.substring(0, 150).replace(/[#*`]/g, '') + '...'}
                   slug={writing.slug}
                   date={new Date(writing.date || '').toLocaleDateString('en-US', { 
                     month: 'short', 
@@ -110,10 +91,7 @@ const Index = () => {
               <p className="text-muted-foreground">No writings yet.</p>
             )}
           </div>
-          <Link 
-            href="/writings"
-            className="text-accent hover:underline inline-block"
-          >
+          <Link href="/writings" className="text-accent hover:underline inline-block">
             Read all writings →
           </Link>
         </section>
@@ -129,7 +107,7 @@ const Index = () => {
                 <ProjectCard 
                   key={project._id}
                   title={project.title}
-                  excerpt={project.body.substring(0, 150) + '...'}
+                  excerpt={project.body.substring(0, 150).replace(/[#*`]/g, '') + '...'}
                   slug={project.slug}
                 />
               ))
@@ -137,10 +115,7 @@ const Index = () => {
               <p className="text-muted-foreground">No projects yet.</p>
             )}
           </div>
-          <Link 
-            href="/projects"
-            className="text-accent hover:underline inline-block"
-          >
+          <Link href="/projects" className="text-accent hover:underline inline-block">
             See all projects →
           </Link>
         </section>
@@ -155,12 +130,9 @@ const Index = () => {
               A failed attempt at undoing memories
             </h3>
             <p className="text-muted-foreground mb-4 leading-relaxed">
-             Tunmise writes in praise of memory's complexity and resilience. He is mindful of the ways in which memory stores and is the store; the ways in which it is beholden to naming and ordering, as well as how it represents…
+             Tunmise writes in praise of memory&apos;s complexity and resilience. He is mindful of the ways in which memory stores and is the store; the ways in which it is beholden to naming and ordering...
             </p>
-            <Link 
-              href="/book"
-              className="text-accent hover:underline"
-            >
+            <Link href="/book" className="text-accent hover:underline">
               Learn more about the book →
             </Link>
           </article>
@@ -172,5 +144,3 @@ const Index = () => {
     </div>
   );
 };
-
-export default Index;
