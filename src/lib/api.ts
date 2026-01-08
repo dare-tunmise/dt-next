@@ -84,18 +84,18 @@ export const api = {
       if (category) {
         url += `&category=${category}`;
       }
-      const response = await fetch(url);
+      const response = await fetch(url, { cache: 'no-store' });
       if (!response.ok) throw new Error('Failed to fetch blogs');
       return response.json();
     },
     getBySlug: async (slug: string): Promise<Blog> => {
-      const response = await fetch(`${API_BASE_URL}/api/blogs/${slug}`);
+      const response = await fetch(`${API_BASE_URL}/api/blogs/${slug}`, { cache: 'no-store' });
       if (!response.ok) throw new Error('Blog not found');
       return response.json();
     },
     getByCategory: async (category: string, page = 1, limit = 10): Promise<BlogsResponse> => {
       const response = await fetch(
-        `${API_BASE_URL}/api/blogs/category/${category}?page=${page}&limit=${limit}`
+        `${API_BASE_URL}/api/blogs/category/${category}?page=${page}&limit=${limit}`, { cache: 'no-store' }
       );
       if (!response.ok) throw new Error('Failed to fetch blogs');
       return response.json();

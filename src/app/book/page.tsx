@@ -93,7 +93,6 @@ const Book = () => {
           </form>
         </div>
       </main>
-     <Header />
     </div>
   );
 };

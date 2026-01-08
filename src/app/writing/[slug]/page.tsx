@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import { Metadata } from 'next';
 import { api } from "@/lib/api";
 import WritingClientPage from './WritingClientPage';
