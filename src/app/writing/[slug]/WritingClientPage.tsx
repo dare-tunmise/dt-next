@@ -14,6 +14,12 @@ const WritingClientPage = ({ slug }: Props) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
+  const cleanHTML = (html: string) => {
+  return html
+    .replace(/&nbsp;/g, ' ') // Replace non-breaking spaces with normal spaces
+    .replace(/<p><br><\/p>/g, '<br/>'); // Fix double-spacing on empty lines
+};
+
   useEffect(() => {
     if (slug) {
       loadPost();
@@ -70,8 +76,8 @@ const WritingClientPage = ({ slug }: Props) => {
           <span>{post.title}</span>
         </nav>
 
-        <article>
-          <h1 className="text-3xl md:text-4xl font-bold mb-4 leading-tight">
+        <article className="w-full max-w-full overflow-hidden">
+          <h1 className="text-3xl md:text-4xl font-bold mb-4 leading-tight break-words">
             {post.title}
           </h1>
           
@@ -96,10 +102,14 @@ const WritingClientPage = ({ slug }: Props) => {
             </div>
           )}
           
-          <div 
-            className="prose prose-invert max-w-none"
-            dangerouslySetInnerHTML={{ __html: post.body }}
-          />
+        <div 
+          className="prose prose-invert max-w-none ql-editor
+                    prose-p:leading-relaxed 
+                    prose-p:my-4 
+                    prose-li:my-1
+                    break-words"
+          dangerouslySetInnerHTML={{ __html: cleanHTML(post.body) }}
+        />
         </article>
 
         <div className="mt-16 pt-8 border-t border-border">

@@ -99,7 +99,19 @@ export default function BlogEditor() {
       ['link', 'image'],
       ['clean'],
     ],
+    clipboard: {
+    matchVisual: false, 
+  }
   }), []);
+
+  useEffect(() => {
+  if (typeof window !== 'undefined') {
+    const Quill = require('react-quill-new').Quill;
+    const Block = Quill.import('blots/block');
+    Block.tagName = 'p';
+    Quill.register(Block, true);
+  }
+}, []);
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">
@@ -166,6 +178,7 @@ export default function BlogEditor() {
               value={formData.body}
               onChange={(content) => setFormData({ ...formData, body: content })}
               modules={modules}
+              preserveWhitespace={true}
             />
           </div>
         </div>

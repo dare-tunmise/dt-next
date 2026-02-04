@@ -2,88 +2,28 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
-
 @layer base {
   :root {
     --background: 0 0% 5%;
     --foreground: 35 40% 85%;
-
     --card: 0 0% 8%;
     --card-foreground: 35 40% 85%;
-
     --popover: 0 0% 8%;
     --popover-foreground: 35 40% 85%;
-
     --primary: 35 40% 85%;
     --primary-foreground: 0 0% 5%;
-
     --secondary: 0 0% 12%;
     --secondary-foreground: 35 40% 85%;
-
     --muted: 0 0% 15%;
     --muted-foreground: 35 20% 60%;
-
     --accent: 30 100% 50%;
     --accent-foreground: 0 0% 5%;
-
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 35 40% 85%;
-
     --border: 0 0% 20%;
     --input: 0 0% 15%;
     --ring: 30 100% 50%;
-
     --radius: 0.5rem;
-
-    --sidebar-background: 0 0% 8%;
-    --sidebar-foreground: 35 40% 85%;
-    --sidebar-primary: 30 100% 50%;
-    --sidebar-primary-foreground: 0 0% 5%;
-    --sidebar-accent: 0 0% 12%;
-    --sidebar-accent-foreground: 35 40% 85%;
-    --sidebar-border: 0 0% 20%;
-    --sidebar-ring: 30 100% 50%;
-  }
-
-  .dark {
-    --background: 0 0% 5%;
-    --foreground: 35 40% 85%;
-
-    --card: 0 0% 8%;
-    --card-foreground: 35 40% 85%;
-
-    --popover: 0 0% 8%;
-    --popover-foreground: 35 40% 85%;
-
-    --primary: 35 40% 85%;
-    --primary-foreground: 0 0% 5%;
-
-    --secondary: 0 0% 12%;
-    --secondary-foreground: 35 40% 85%;
-
-    --muted: 0 0% 15%;
-    --muted-foreground: 35 20% 60%;
-
-    --accent: 30 100% 50%;
-    --accent-foreground: 0 0% 5%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 35 40% 85%;
-
-    --border: 0 0% 20%;
-    --input: 0 0% 15%;
-    --ring: 30 100% 50%;
-    --sidebar-background: 0 0% 8%;
-    --sidebar-foreground: 35 40% 85%;
-    --sidebar-primary: 30 100% 50%;
-    --sidebar-primary-foreground: 0 0% 5%;
-    --sidebar-accent: 0 0% 12%;
-    --sidebar-accent-foreground: 35 40% 85%;
-    --sidebar-border: 0 0% 20%;
-    --sidebar-ring: 30 100% 50%;
   }
 }
 
@@ -91,28 +31,51 @@ All colors MUST be HSL.
   * {
     @apply border-border;
   }
-
   body {
-    @apply bg-background text-foreground font-mono;
+    @apply bg-background text-foreground font-mono antialiased;
   }
-
   h1, h2, h3, h4, h5, h6 {
     @apply font-sans;
   }
 }
 
-/* @layer base {
-  * {
-    @apply border-border;
-  }
+/* --- React Quill & Blog Typography Fixes --- */
 
-  body {
-    @apply bg-background text-foreground antialiased;
-    font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  }
-} */
+/* 1. Reset and Font Consistency */
+.ql-container {
+  font-family: inherit !important; 
+  font-size: 1.1rem !important;
+  background: hsl(var(--background)) !important;
+  border-color: hsl(var(--border)) !important;
+  color: hsl(var(--foreground)) !important;
+  border-bottom-left-radius: 0.375rem;
+  border-bottom-right-radius: 0.375rem;
+}
 
-/* React Quill Editor Styles */
+/* 2. THE WORD-WRAP FIX (Prevents "entir-ely" splitting) */
+.ql-editor, .prose.ql-editor {
+  min-height: 500px;
+  white-space: pre-wrap !important; 
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
+  
+  /* CRITICAL: These two lines stop words from breaking mid-way */
+  word-break: keep-all !important; 
+  hyphens: none !important;
+
+  text-align: left !important;
+  line-height: 1.8 !important;
+}
+
+/* 3. Spacing and Indent Resets */
+.prose p {
+  margin-top: 1.5em !important;
+  margin-bottom: 1.5em !important;
+  text-indent: 0 !important; /* Removes ghost indents */
+  padding: 0 !important;
+}
+
+/* 4. Quill Toolbar Styling */
 .ql-toolbar {
   background: hsl(var(--card)) !important;
   border-color: hsl(var(--border)) !important;
@@ -120,69 +83,37 @@ All colors MUST be HSL.
   border-top-right-radius: 0.375rem;
 }
 
-.ql-container {
-  background: hsl(var(--background)) !important;
-  border-color: hsl(var(--border)) !important;
-  color: hsl(var(--foreground)) !important;
-  font-family: 'Courier New', monospace;
-  border-bottom-left-radius: 0.375rem;
-  border-bottom-right-radius: 0.375rem;
-}
-
-.ql-editor {
-  min-height: 400px;
-  color: hsl(var(--foreground)) !important;
-}
-
-.ql-stroke {
-  stroke: hsl(var(--foreground)) !important;
-}
-
-.ql-fill {
-  fill: hsl(var(--foreground)) !important;
-}
-
-.ql-picker-label {
-  color: hsl(var(--foreground)) !important;
-}
-
-.ql-picker-options {
-  background: hsl(var(--card)) !important;
-  border-color: hsl(var(--border)) !important;
-}
+.ql-stroke { stroke: hsl(var(--foreground)) !important; }
+.ql-fill { fill: hsl(var(--foreground)) !important; }
+.ql-picker-label { color: hsl(var(--foreground)) !important; }
 
 .ql-toolbar button:hover,
-.ql-toolbar button.ql-active {
+.ql-toolbar button.ql-active,
+.ql-toolbar .ql-active .ql-stroke {
   color: hsl(var(--accent)) !important;
-}
-
-.ql-toolbar button:hover .ql-stroke,
-.ql-toolbar button.ql-active .ql-stroke {
   stroke: hsl(var(--accent)) !important;
 }
 
-.ql-toolbar button:hover .ql-fill,
-.ql-toolbar button.ql-active .ql-fill {
-  fill: hsl(var(--accent)) !important;
-}
-
+/* 5. Code Block and Image Styling */
 .prose pre {
-  background-color: rgba(255, 255, 255, 0.05);
+  background-color: hsl(var(--muted)) !important;
   padding: 1rem;
   border-radius: 0.5rem;
-  overflow-x: auto;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid hsl(var(--border));
+  font-family: ui-monospace, monospace;
+  white-space: pre !important; /* Code blocks should not wrap like body text */
+}
+
+.prose img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 2rem auto;
 }
 
 .prose code {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: hsl(var(--muted));
   padding: 0.2rem 0.4rem;
   border-radius: 0.25rem;
-  font-family: 'Courier New', monospace;
   font-size: 0.9em;
-}
-
-.prose pre code {
-  background-color: transparent;
-  padding: 0;
 }
