@@ -103,11 +103,7 @@ const WritingClientPage = ({ slug }: Props) => {
           )}
           
         <div 
-          className="prose prose-invert max-w-none ql-editor
-                    prose-p:leading-relaxed 
-                    prose-p:my-4 
-                    prose-li:my-1
-                    break-words"
+          className="prose prose-invert max-w-none ql-editor"
           dangerouslySetInnerHTML={{ __html: cleanHTML(post.body) }}
         />
         </article>

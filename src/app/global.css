@@ -58,7 +58,7 @@
   white-space: pre-wrap !important; 
   word-wrap: break-word !important;
   overflow-wrap: break-word !important;
-  
+  padding: 0 !important;
   /* CRITICAL: These two lines stop words from breaking mid-way */
   word-break: keep-all !important; 
   hyphens: none !important;
