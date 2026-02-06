@@ -54,7 +54,7 @@ const About = () => {
 
           <h2 className="text-2xl font-bold mb-4 mt-12">What I Do</h2>
 
-          <p className="leading-relaxed mb-6">I collaborate with companies that want to integrate AI into their daily operations — whether that’s:</p>
+          <p className="leading-relaxed mb-6">I collaborate with companies and startups that want to integrate AI into their daily operations — whether that’s:</p>
           <ul className="space-y-4">
             <li className="flex items-start">
               <span className="flex h-2 w-2 mt-2 rounded-full bg-blue-500 mr-3"></span>
@@ -75,7 +75,7 @@ const About = () => {
           </ul>
 
           <p className="leading-relaxed mt-4 mb-6">
-            project minimum typically starts at $3,000, with final pricing based on scope and complexity.
+            Project engagements typically start at $5,000, with smaller Discovery/PoC phases beginning at $3,000 depending on scope and timeline.
           </p>
 
           <h2 className="text-2xl font-bold mb-4 mt-12">Get in Touch</h2>
