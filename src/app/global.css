@@ -96,12 +96,29 @@
 
 /* 5. Code Block and Image Styling */
 .prose pre {
-  background-color: hsl(var(--muted)) !important;
+background-color: hsl(var(--muted)) !important;
   padding: 1rem;
   border-radius: 0.5rem;
   border: 1px solid hsl(var(--border));
   font-family: ui-monospace, monospace;
-  white-space: pre !important; /* Code blocks should not wrap like body text */
+  
+  /* Forces horizontal scroll for long lines instead of breaking the layout */
+  overflow-x: auto !important; 
+  white-space: pre !important; 
+  word-spacing: normal;
+  word-break: normal;
+  
+  /* Makes scrolling smooth on mobile */
+  -webkit-overflow-scrolling: touch;
+}
+
+.prose pre::-webkit-scrollbar {
+  height: 4px;
+}
+
+.prose pre::-webkit-scrollbar-thumb {
+  background: hsl(var(--accent));
+  border-radius: 10px;
 }
 
 .prose img {
