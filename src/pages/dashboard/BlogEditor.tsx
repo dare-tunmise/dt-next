@@ -115,7 +115,7 @@ export default function BlogEditor() {
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">
-      <h1 className="text-3xl font-bold text-foreground font-mono">
+      <h1 className="text-2xl sm:text-3xl font-bold text-foreground font-mono">
         {id ? 'Edit Post' : 'Create New Post'}
       </h1>
 
@@ -196,16 +196,17 @@ export default function BlogEditor() {
           </Label>
         </div>
 
-        <div className="flex items-center gap-4">
-          <Button type="submit" disabled={loading}>
-            {loading ? 'Saving...' : id ? 'Update Post' : 'Create Post'}
-          </Button>
+        <div className="flex flex-col-reverse sm:flex-row sm:items-center gap-3 sm:gap-4">
           <Button
             type="button"
             variant="outline"
             onClick={() => router.push('/admin/dashboard')}
+            className="w-full sm:w-auto"
           >
             Cancel
+          </Button>
+          <Button type="submit" disabled={loading} className="w-full sm:w-auto">
+            {loading ? 'Saving...' : id ? 'Update Post' : 'Create Post'}
           </Button>
         </div>
       </form>

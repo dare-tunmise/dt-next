@@ -76,10 +76,10 @@ const handleTogglePublish = async (id: string, currentStatus: boolean) => {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold text-foreground font-mono">All Content</h1>
-        <Link href="/admin/dashboard/new">
-          <Button>Create New Post</Button>
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <h1 className="text-2xl sm:text-3xl font-bold text-foreground font-mono">All Content</h1>
+        <Link href="/admin/dashboard/new" className="w-full sm:w-auto">
+          <Button className="w-full sm:w-auto">Create New Post</Button>
         </Link>
       </div>
 
@@ -87,38 +87,39 @@ const handleTogglePublish = async (id: string, currentStatus: boolean) => {
         {blogs.map((blog) => (
           <div
             key={blog._id}
-            className="border border-border rounded-lg p-6 bg-card"
+            className="border border-border rounded-lg p-4 sm:p-6 bg-card"
           >
-            <div className="flex items-start justify-between">
-              <div className="space-y-2 flex-1">
-                <div className="flex items-center gap-3">
-                  <h3 className="text-xl font-semibold text-foreground font-mono">
+            <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+              <div className="space-y-2 flex-1 min-w-0">
+                <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+                  <h3 className="text-lg sm:text-xl font-semibold text-foreground font-mono break-words">
                     {blog.title}
                   </h3>
                   <span className="text-xs px-2 py-1 rounded bg-accent/20 text-accent font-mono">
                     {blog.category}
                   </span>
                   <span className={`text-xs px-2 py-1 rounded font-mono ${
-                    blog.published 
-                      ? 'bg-green-500/20 text-green-500' 
+                    blog.published
+                      ? 'bg-green-500/20 text-green-500'
                       : 'bg-yellow-500/20 text-yellow-500'
                   }`}>
                     {blog.published ? 'Published' : 'Draft'}
                   </span>
                 </div>
-                <p className="text-sm text-muted-foreground font-mono">
+                <p className="text-xs sm:text-sm text-muted-foreground font-mono break-all">
                   /{blog.category === 'writings' ? 'blog' : 'project'}/{blog.slug}
                 </p>
               </div>
 
-              <div className="flex gap-2">
-                <Link href={`/admin/dashboard/edit/${blog._id}`}>
-                  <Button variant="outline" size="sm">Edit</Button>
+              <div className="flex flex-wrap gap-2 md:flex-nowrap md:shrink-0">
+                <Link href={`/admin/dashboard/edit/${blog._id}`} className="flex-1 md:flex-none">
+                  <Button variant="outline" size="sm" className="w-full md:w-auto">Edit</Button>
                 </Link>
                 <Button
                   variant="outline"
                   size="sm"
                   onClick={() => handleTogglePublish(blog._id!, blog.published)}
+                  className="flex-1 md:flex-none"
                 >
                   {blog.published ? 'Unpublish' : 'Publish'}
                 </Button>
@@ -126,6 +127,7 @@ const handleTogglePublish = async (id: string, currentStatus: boolean) => {
                   variant="destructive"
                   size="sm"
                   onClick={() => handleDelete(blog._id!)}
+                  className="flex-1 md:flex-none"
                 >
                   Delete
                 </Button>
