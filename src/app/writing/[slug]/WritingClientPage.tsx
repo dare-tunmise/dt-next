@@ -1,9 +1,17 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from 'next/link';
+import Script from 'next/script';
 import { api, Blog } from "@/lib/api";
 import Footer from "@/components/Footer";
+
+declare global {
+  interface Window {
+    initSlowclapWidget?: (container: HTMLElement) => void;
+    destroySlowclapWidget?: (container: HTMLElement) => void;
+  }
+}
 
 interface Props {
   slug: string;
@@ -13,6 +21,8 @@ const WritingClientPage = ({ slug }: Props) => {
   const [post, setPost] = useState<Blog | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [scriptReady, setScriptReady] = useState(false);
+  const widgetRef = useRef<HTMLDivElement>(null);
 
   const cleanHTML = (html: string) => {
   return html
@@ -25,6 +35,13 @@ const WritingClientPage = ({ slug }: Props) => {
       loadPost();
     }
   }, [slug]);
+
+  useEffect(() => {
+    if (!scriptReady || !post?._id || !widgetRef.current) return;
+    const el = widgetRef.current;
+    window.destroySlowclapWidget?.(el);
+    window.initSlowclapWidget?.(el);
+  }, [scriptReady, post?._id]);
 
   const loadPost = async () => {
     try {
@@ -102,11 +119,24 @@ const WritingClientPage = ({ slug }: Props) => {
             </div>
           )}
           
-        <div 
+        <div
           className="prose prose-invert max-w-none ql-editor"
           dangerouslySetInnerHTML={{ __html: cleanHTML(post.body) }}
         />
         </article>
+
+        <div className="mt-12 flex justify-center">
+          <div
+            key={post._id}
+            ref={widgetRef}
+            className="slowclap-widget"
+            data-platform-id={post._id}
+            data-color-accent="#ff8000"
+            data-color-default="#1a1a1a"
+            data-color-clapped="#ff8000"
+            data-color-text="#dccfb8"
+          />
+        </div>
 
         <div className="mt-16 pt-8 border-t border-border">
           <Link href={`/writings`} className="text-accent hover:underline">
@@ -115,6 +145,12 @@ const WritingClientPage = ({ slug }: Props) => {
         </div>
       </main>
       <Footer />
+      <Script
+        src="https://slowclap.xyz/widget.js"
+        data-key={process.env.NEXT_PUBLIC_SLOWCLAP_KEY}
+        strategy="afterInteractive"
+        onReady={() => setScriptReady(true)}
+      />
     </div>
   );
 };
