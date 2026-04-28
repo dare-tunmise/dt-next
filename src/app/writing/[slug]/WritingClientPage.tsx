@@ -133,7 +133,7 @@ const WritingClientPage = ({ slug }: Props) => {
             data-platform-id={post._id}
             data-color-accent="#ff8000"
             data-color-default="#1a1a1a"
-            data-color-clapped="#ff8000"
+            data-color-clapped="#2a1f10"
             data-color-text="#dccfb8"
           />
         </div>

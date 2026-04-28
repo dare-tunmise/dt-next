@@ -3,28 +3,39 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
-  title: "About | Dare Tunmise - Writer & Software Engineer",
+  title: "About",
   description:
-    "Learn about Dare Tunmise, a software engineer building backend systems and AI-powered tools. Specializing in LLMs, system architecture, and workflow automation.",
+    "About Dare Tunmise — software engineer building backend systems and AI-powered tools. Available for AI integrations, custom agents, and workflow automation.",
+  keywords: [
+    "Dare Tunmise",
+    "about Dare Tunmise",
+    "AI engineer for hire",
+    "backend engineer",
+    "AI consultant",
+    "LLM engineer",
+  ],
+  alternates: { canonical: "https://www.daretunmise.com/about" },
   openGraph: {
     title: "About Dare Tunmise",
-    description: "Software Engineer & Writer building at the intersection of AI and human behavior.",
+    description:
+      "Software engineer building backend systems and AI tools. Available for AI integrations, custom agents, and workflow automation.",
     url: "https://www.daretunmise.com/about",
+    type: "profile",
     images: [
       {
-        url: "https://www.daretunmise.com/og-image.jpg",
+        url: "/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "Dare Tunmise Portfolio",
+        alt: "About Dare Tunmise",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
     title: "About Dare Tunmise",
-    description: "Writer and Software Engineer.",
+    description: "Software engineer building backend systems and AI-powered tools.",
     creator: "@Dare_Tunmise",
-    images: ["https://www.daretunmise.com/og-image.jpg"],
+    images: ["/og-image.jpg"],
   },
 };
 

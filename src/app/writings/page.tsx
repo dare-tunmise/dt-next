@@ -9,19 +9,29 @@ import { api, Blog } from "@/lib/api";
 
 export const metadata: Metadata = {
   title: "Writings",
-  description: "A collection of essays, thoughts, and articles by Dare Tunmise on technology, software engineering, and human behavior.",
+  description:
+    "Essays and writings by Dare Tunmise on software engineering, AI, language models, systems design, and the human side of building things.",
+  keywords: [
+    "Dare Tunmise writings",
+    "Dare Tunmise essays",
+    "software engineering essays",
+    "AI essays",
+    "writing",
+  ],
+  alternates: { canonical: "https://www.daretunmise.com/writings" },
   openGraph: {
     title: "Writings | Dare Tunmise",
-    description: "Essays and articles on software engineering, AI, and systems design.",
+    description:
+      "Essays and writings by Dare Tunmise on software engineering, AI, and systems design.",
     url: "https://www.daretunmise.com/writings",
     type: "website",
-    images: [{ url: "https://www.daretunmise.com/og-image.jpg" }],
+    images: [{ url: "/og-image.jpg", width: 1200, height: 630, alt: "Writings by Dare Tunmise" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Writings by Dare Tunmise",
-    description: "Thoughts on code, writing, and building systems.",
-    images: ["https://www.daretunmise.com/og-image.jpg"],
+    description: "Essays on code, writing, and building systems.",
+    images: ["/og-image.jpg"],
   },
 };
 

@@ -3,21 +3,24 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
-  title: "A Failed Attempt at Undoing Memories",
-  description: "Explore 'A failed attempt at undoing memories' by Dare Tunmise. Edited by Kwame Dawes and Chris Abani, published by the African Poetry Book Fund.",
+  title: "Book — A Failed Attempt at Undoing Memories",
+  description:
+    "\"A Failed Attempt at Undoing Memories\" — a poetry collection by Dare Tunmise, edited by Kwame Dawes and Chris Abani, published by the African Poetry Book Fund and Akashic Books.",
   keywords: [
-    "Dare Tunmise", 
-    "A failed attempt at undoing memories", 
-    "African Poetry Book Fund", 
-    "Kwame Dawes", 
-    "Chris Abani", 
+    "Dare Tunmise",
+    "A failed attempt at undoing memories",
+    "African Poetry Book Fund",
+    "Kwame Dawes",
+    "Chris Abani",
     "African poetry",
-    "African poetry Book Fund", 
-    "Akashic Books"
+    "Akashic Books",
+    "poetry collection",
   ],
+  alternates: { canonical: "https://www.daretunmise.com/book" },
   openGraph: {
-    title: "A Failed Attempt at Undoing Memories by Dare Tunmise",
-    description: "A poetry collection exploring memory's complexity and resilience.",
+    title: "A Failed Attempt at Undoing Memories — Dare Tunmise",
+    description:
+      "A poetry collection by Dare Tunmise exploring memory's complexity and resilience. Edited by Kwame Dawes and Chris Abani.",
     url: "https://www.daretunmise.com/book",
     type: "book",
     images: [
@@ -25,14 +28,14 @@ export const metadata: Metadata = {
         url: "https://m.media-amazon.com/images/S/aplus-media-library-service-media/b6f4bccb-7e88-4b72-8835-1fcf2b2cf838.__CR0,0,300,300_PT0_SX300_V1___.jpg",
         width: 300,
         height: 300,
-        alt: "Book Cover - A failed attempt at undoing memories",
+        alt: "A Failed Attempt at Undoing Memories — Book Cover",
       },
     ],
   },
   twitter: {
     card: "summary",
-    title: "A Failed Attempt at Undoing Memories",
-    description: "New poetry from Dare Tunmise, edited by Kwame Dawes and Chris Abani.",
+    title: "A Failed Attempt at Undoing Memories — Dare Tunmise",
+    description: "Poetry by Dare Tunmise. Edited by Kwame Dawes and Chris Abani.",
     images: ["https://m.media-amazon.com/images/S/aplus-media-library-service-media/b6f4bccb-7e88-4b72-8835-1fcf2b2cf838.__CR0,0,300,300_PT0_SX300_V1___.jpg"],
   },
 };

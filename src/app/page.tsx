@@ -5,6 +5,26 @@ import BlogCard from "@/components/BlogCard";
 import ProjectCard from "@/components/ProjectCard";
 import { api, Blog } from "@/lib/api";
 
+export const metadata: Metadata = {
+  title: { absolute: "Dare Tunmise — Software Engineer, Writer & Poet" },
+  description:
+    "Dare Tunmise is a software engineer, writer, and poet. Read essays, see backend & AI projects, and explore the poetry collection \"A Failed Attempt at Undoing Memories.\"",
+  alternates: { canonical: "https://www.daretunmise.com" },
+  openGraph: {
+    title: "Dare Tunmise — Software Engineer, Writer & Poet",
+    description:
+      "Essays, software projects, and the poetry collection \"A Failed Attempt at Undoing Memories.\"",
+    url: "https://www.daretunmise.com",
+    type: "website",
+    images: [{ url: "/og-image.jpg", width: 1200, height: 630, alt: "Dare Tunmise" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Dare Tunmise — Software Engineer, Writer & Poet",
+    description: "Essays, software projects, and a poetry collection.",
+    images: ["/og-image.jpg"],
+  },
+};
 
 export default async function Index() {
 let recentWritings: Blog[] = [];

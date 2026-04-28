@@ -4,14 +4,30 @@ import Footer from "@/components/Footer";
 import ProjectCard from "@/components/ProjectCard";
 import { api, Blog } from "@/lib/api";
 
-// 1. Metadata for SEO
 export const metadata: Metadata = {
-  title: "Projects | Dare Tunmise",
-  description: "A showcase of backend systems, AI agents, and software engineering projects built by Dare Tunmise.",
+  title: "Projects",
+  description:
+    "Software projects by Dare Tunmise — backend systems, AI agents, and developer tools. Explore source code on GitHub and read the build notes.",
+  keywords: [
+    "Dare Tunmise projects",
+    "software engineering portfolio",
+    "AI agents",
+    "backend systems",
+    "open source",
+  ],
+  alternates: { canonical: "https://www.daretunmise.com/projects" },
   openGraph: {
-    title: "Projects by Dare Tunmise",
-    description: "Scalable backend systems and AI-powered tools.",
+    title: "Projects | Dare Tunmise",
+    description: "Backend systems, AI agents, and developer tools by Dare Tunmise.",
     url: "https://www.daretunmise.com/projects",
+    type: "website",
+    images: [{ url: "/og-image.jpg", width: 1200, height: 630, alt: "Projects by Dare Tunmise" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Projects by Dare Tunmise",
+    description: "Backend systems, AI agents, and developer tools.",
+    images: ["/og-image.jpg"],
   },
 };
 
