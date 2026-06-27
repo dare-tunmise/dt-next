@@ -68,8 +68,8 @@ const ProjectClientPage = ({ slug }: Props) => {
           <span>{project.title}</span>
         </nav>
 
-        <article>
-          <h1 className="text-3xl md:text-4xl font-bold mb-8 leading-tight">
+        <article className="w-full max-w-full overflow-hidden">
+          <h1 className="text-3xl md:text-4xl font-bold mb-8 leading-tight break-words">
             {project.title}
           </h1>
 
@@ -87,7 +87,7 @@ const ProjectClientPage = ({ slug }: Props) => {
           )}
 
           <div
-            className="prose prose-invert max-w-none"
+            className="prose prose-invert max-w-none ql-editor"
             dangerouslySetInnerHTML={{ __html: project.body }}
           />
         </article>
