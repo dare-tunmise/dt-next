@@ -9,6 +9,12 @@ interface Props {
   slug: string;
 }
 
+const cleanHTML = (html: string) => {
+  return html
+    .replace(/&nbsp;/g, ' ')
+    .replace(/<p><br><\/p>/g, '<br/>');
+};
+
 const ProjectClientPage = ({ slug }: Props) => {
   const [project, setProject] = useState<Blog | null>(null);
   const [loading, setLoading] = useState(true);
@@ -88,7 +94,7 @@ const ProjectClientPage = ({ slug }: Props) => {
 
           <div
             className="prose prose-invert max-w-none ql-editor"
-            dangerouslySetInnerHTML={{ __html: project.body }}
+            dangerouslySetInnerHTML={{ __html: cleanHTML(project.body) }}
           />
         </article>
 
