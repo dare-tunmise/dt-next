@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react';
 import { api } from '@/lib/api';
+import { isTrackingDisabled } from '@/lib/tracking';
 
 // Time a reader must actually be looking at the page before it counts as read
 // rather than merely opened.
@@ -18,7 +19,8 @@ const ENGAGED_AFTER_MS = 30_000;
  */
 const ViewTracker = ({ slug }: { slug: string }) => {
   useEffect(() => {
-    if (!slug) return;
+    // Checked inside the effect: localStorage isn't available during SSR.
+    if (!slug || isTrackingDisabled()) return;
 
     api.analytics.recordView(slug);
 

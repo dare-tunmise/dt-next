@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from 'next/link';
 import Script from 'next/script';
 import { Blog } from "@/lib/api";
+import { cleanPostHtml } from "@/lib/html";
 import Footer from "@/components/Footer";
 
 declare global {
@@ -23,12 +24,6 @@ interface Props {
 const WritingClientPage = ({ post }: Props) => {
   const [scriptReady, setScriptReady] = useState(false);
   const widgetRef = useRef<HTMLDivElement>(null);
-
-  const cleanHTML = (html: string) => {
-    return html
-      .replace(/&nbsp;/g, ' ') // Replace non-breaking spaces with normal spaces
-      .replace(/<p><br><\/p>/g, '<br/>'); // Fix double-spacing on empty lines
-  };
 
   useEffect(() => {
     if (!scriptReady || !post._id || !widgetRef.current) return;
@@ -78,7 +73,7 @@ const WritingClientPage = ({ post }: Props) => {
 
         <div
           className="prose prose-invert max-w-none ql-editor"
-          dangerouslySetInnerHTML={{ __html: cleanHTML(post.body) }}
+          dangerouslySetInnerHTML={{ __html: cleanPostHtml(post.body) }}
         />
         </article>
 

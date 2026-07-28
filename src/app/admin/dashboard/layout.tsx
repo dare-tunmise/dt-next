@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
+import { setTrackingDisabled } from '@/lib/tracking';
 import { adminFrame, quietAction } from '@/lib/adminStyles';
 
 const TABS = [
@@ -23,6 +24,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       router.push('/admin/login');
     }
   }, [user, loading, router]);
+
+  // Reaching the dashboard proves this browser is the author's, so stop
+  // counting it in analytics. Once per browser; reversible from the
+  // analytics page.
+  useEffect(() => {
+    if (user) setTrackingDisabled(true);
+  }, [user]);
 
   if (loading) {
     return (
