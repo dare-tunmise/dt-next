@@ -1,16 +1,11 @@
 import Link from "next/link";
 import { Blog } from "@/lib/api";
+import { cleanPostHtml } from "@/lib/html";
 import Footer from "@/components/Footer";
 
 interface Props {
   post: Blog;
 }
-
-const cleanHTML = (html: string) => {
-  return html
-    .replace(/&nbsp;/g, ' ')
-    .replace(/<p><br><\/p>/g, '<br/>');
-};
 
 // Plain server component: the project page has no interactive elements, so it
 // ships no client JS at all.
@@ -46,7 +41,7 @@ const ProjectArticle = ({ post }: Props) => {
 
           <div
             className="prose prose-invert max-w-none ql-editor"
-            dangerouslySetInnerHTML={{ __html: cleanHTML(post.body) }}
+            dangerouslySetInnerHTML={{ __html: cleanPostHtml(post.body) }}
           />
         </article>
 
