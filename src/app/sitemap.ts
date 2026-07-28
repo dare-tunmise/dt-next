@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next'
 import { api } from '@/lib/api' // Import your API instance
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = 'https://www.daretunmise.com';
+  const baseUrl = 'https://daretunmise.com';
 
   // 1. Fetch all blogs/projects from your backend
   let blogEntries: MetadataRoute.Sitemap = [];

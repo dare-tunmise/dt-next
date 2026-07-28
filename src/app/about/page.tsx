@@ -16,13 +16,13 @@ export const metadata: Metadata = {
     "AI consultant",
     "LLM engineer",
   ],
-  alternates: { canonical: "https://www.daretunmise.com/about" },
+  alternates: { canonical: "https://daretunmise.com/about" },
   openGraph: {
     siteName: "Dare Tunmise",
     title: "About Dare Tunmise",
     description:
       "Software engineer and writer. Backend services, system architecture, and AI features in production.",
-    url: "https://www.daretunmise.com/about",
+    url: "https://daretunmise.com/about",
     type: "profile",
     images: [
       {

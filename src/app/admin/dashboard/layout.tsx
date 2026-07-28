@@ -34,7 +34,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   if (!user) return null;
 
   const isActive = (tab: (typeof TABS)[number]) =>
-    tab.exact ? pathname === tab.href : pathname.startsWith(tab.href);
+    tab.exact ? pathname === tab.href : !!pathname?.startsWith(tab.href);
 
   return (
     <div className="min-h-screen bg-background font-mono">
