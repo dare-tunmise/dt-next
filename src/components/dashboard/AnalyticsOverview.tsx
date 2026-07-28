@@ -6,6 +6,7 @@ import { api, AnalyticsSummary } from '@/lib/api';
 import { useToast } from '@/hooks/use-toast';
 import { adminLabel } from '@/lib/adminStyles';
 import StatTile from './StatTile';
+import TrackingToggle from './TrackingToggle';
 
 const rate = (part: number, whole: number) =>
   whole === 0 ? '—' : `${Math.round((part / whole) * 100)}%`;
@@ -97,6 +98,8 @@ export default function AnalyticsOverview() {
           </div>
         )}
       </div>
+
+      <TrackingToggle />
     </div>
   );
 }
