@@ -1,11 +1,13 @@
 import { Metadata } from "next";
+import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { pageFrame, pageTitle } from "@/lib/typography";
 
 export const metadata: Metadata = {
   title: "About",
   description:
-    "About Dare Tunmise — software engineer building backend systems and AI-powered tools. Available for AI integrations, custom agents, and workflow automation.",
+    "Dare Tunmise — software engineer and writer. Backend services, system architecture, and AI features in production. Available for AI and automation work.",
   keywords: [
     "Dare Tunmise",
     "about Dare Tunmise",
@@ -16,9 +18,10 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "https://www.daretunmise.com/about" },
   openGraph: {
+    siteName: "Dare Tunmise",
     title: "About Dare Tunmise",
     description:
-      "Software engineer building backend systems and AI tools. Available for AI integrations, custom agents, and workflow automation.",
+      "Software engineer and writer. Backend services, system architecture, and AI features in production.",
     url: "https://www.daretunmise.com/about",
     type: "profile",
     images: [
@@ -33,7 +36,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "About Dare Tunmise",
-    description: "Software engineer building backend systems and AI-powered tools.",
+    description: "Software engineer and writer. Backend, systems, and AI features in production.",
     creator: "@Dare_Tunmise",
     images: ["/og-image.jpg"],
   },
@@ -43,8 +46,8 @@ const About = () => {
   return (
     <div className="min-h-screen">
     <Header />
-      <main className="container mx-auto px-4 py-12 max-w-3xl">
-        <h1 className="text-4xl font-bold mb-8 border-b border-border pb-4">
+      <main className={`${pageFrame} pb-16`}>
+        <h1 className={`${pageTitle} mb-10 mt-16 sm:mt-20`}>
           About
         </h1>
 
@@ -52,15 +55,22 @@ const About = () => {
           <p className="text-lg leading-relaxed mb-6">Hi, </p>
           <p className="text-lg leading-relaxed mb-6">
             I’m Dare Tunmise — a software engineer and writer.
-            I build backend systems, AI-powered tools, and thoughtful products on the web that make work easier for people.
           </p>
 
           <p className="leading-relaxed mb-6">
-            I currently work with a London-based travel-tech company, where I build backend services, design system architecture, and develop AI-powered features used in production. My work centers on understanding how large language models behave under real-world constraints and using that understanding to solve practical problems for teams and businesses.
+            I currently work with a London-based travel-tech company, where I work on backend services, system architecture, cloud run applications and AI-powered features used in production. Most of my work centers on understanding how large language models behave under real-world constraints and using that understanding to solve practical problems for teams and businesses.
           </p>
 
           <p className="leading-relaxed mb-6">
-            Outside work, I explore ideas, write, and build products that sit at the intersection of technology, structure, and human behaviour. I enjoy taking messy workflows, ambiguous information, or complex processes and designing systems that make them simple and usable.
+            Outside work, I write. I’m the author of{" "}
+            <Link href="/book" className="text-accent hover:underline">
+              <em>A Failed Attempt at Undoing Memories</em>
+            </Link>
+            , a poetry collection published by the African Poetry Book Fund and Akashic Books. I write essays too — most of them end up{" "}
+            <Link href="/writings" className="text-accent hover:underline">
+              here
+            </Link>
+            .
           </p>
 
           <h2 className="text-2xl font-bold mb-4 mt-12">What I Do</h2>

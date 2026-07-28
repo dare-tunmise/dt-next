@@ -32,10 +32,14 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground font-mono antialiased;
+    @apply bg-background text-foreground font-serif antialiased;
   }
   h1, h2, h3, h4, h5, h6 {
-    @apply font-sans;
+    @apply font-serif;
+  }
+  /* Code stays monospaced even though the body is now serif. */
+  code, kbd, samp, pre {
+    @apply font-mono;
   }
 }
 
@@ -145,4 +149,23 @@ background-color: hsl(var(--muted)) !important;
   padding: 0.2rem 0.4rem;
   border-radius: 0.25rem;
   font-size: 0.9em;
+}
+
+/* 6. Links inside post bodies.
+   Scoped to .ql-editor (post bodies and the admin editor carry it) rather than
+   .prose, so the hand-styled links on /about and /book keep their own
+   underline-on-hover treatment. hsl(var(--accent)) is #ff8000. */
+.ql-editor a {
+  color: hsl(var(--accent));
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  text-decoration-thickness: 1px;
+  /* .ql-editor sets word-break: keep-all, which would let a long bare URL
+     push past the column instead of wrapping. */
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+.ql-editor a:hover {
+  text-decoration-thickness: 2px;
 }

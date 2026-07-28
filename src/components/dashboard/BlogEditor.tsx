@@ -5,10 +5,8 @@ import { useEffect, useState, useMemo } from 'react';
 import { useRouter, useParams } from 'next/navigation'; 
 import dynamic from 'next/dynamic'; // 2. For Dynamic Importing
 import { api } from '@/lib/api';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
+import { adminLabel, quietAction, primaryButton, fieldInput } from '@/lib/adminStyles';
 
 // 3. Dynamically import ReactQuill to disable SSR (Server Side Rendering)
 // This prevents the "window is not defined" error.
@@ -114,65 +112,69 @@ export default function BlogEditor() {
 }, []);
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
-      <h1 className="text-2xl sm:text-3xl font-bold text-foreground font-mono">
-        {id ? 'Edit Post' : 'Create New Post'}
+    <div>
+      <h1 className="text-2xl text-foreground">
+        {id ? 'Edit post' : 'New post'}
       </h1>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="space-y-2">
-          <Label htmlFor="category" className="font-mono">Category</Label>
-          <select
-            id="category"
-            value={formData.category}
-            onChange={(e) => setFormData({ ...formData, category: e.target.value as 'writings' | 'projects' })}
-            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background font-mono focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-            required
-          >
-            <option value="writings">Writings</option>
-            <option value="projects">Projects</option>
-          </select>
+      <form onSubmit={handleSubmit} className="mt-10 space-y-10">
+        {/* Category and date share a row — they're both short metadata. */}
+        <div className="grid gap-8 sm:grid-cols-2">
+          <div>
+            <label htmlFor="category" className={adminLabel}>Category</label>
+            <select
+              id="category"
+              value={formData.category}
+              onChange={(e) => setFormData({ ...formData, category: e.target.value as 'writings' | 'projects' })}
+              className={`${fieldInput} mt-3 cursor-pointer`}
+              required
+            >
+              <option value="writings">Writings</option>
+              <option value="projects">Projects</option>
+            </select>
+          </div>
+
+          <div>
+            <label htmlFor="date" className={adminLabel}>Publish date</label>
+            <input
+              id="date"
+              type="date"
+              value={formData.date}
+              onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+              className={`${fieldInput} mt-3`}
+            />
+          </div>
         </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="title" className="font-mono">Title</Label>
-          <Input
+        <div>
+          <label htmlFor="title" className={adminLabel}>Title</label>
+          <input
             id="title"
             value={formData.title}
             onChange={(e) => setFormData({ ...formData, title: e.target.value })}
             required
-            className="font-mono"
-          />
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="date" className="font-mono">Publish Date</Label>
-          <Input
-            id="date"
-            type="date"
-            value={formData.date}
-            onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-            className="font-mono"
+            placeholder="Untitled"
+            className={`${fieldInput} mt-3 text-2xl`}
           />
         </div>
 
         {formData.category === 'projects' && (
-          <div className="space-y-2">
-            <Label htmlFor="githubLink" className="font-mono">GitHub Link</Label>
-            <Input
+          <div>
+            <label htmlFor="githubLink" className={adminLabel}>Link</label>
+            <input
               id="githubLink"
               type="url"
               value={formData.githubLink}
               onChange={(e) => setFormData({ ...formData, githubLink: e.target.value })}
-              placeholder="https://github.com/username/repo"
-              className="font-mono"
+              placeholder="Live site or repo — https://…"
+              className={`${fieldInput} mt-3`}
             />
           </div>
         )}
 
-        <div className="space-y-2">
-          <Label className="font-mono">Content</Label>
-          <div className="bg-card border border-border rounded-md min-h-[400px]">
+        <div>
+          <label className={adminLabel}>Content</label>
+          <div className="mt-3 min-h-[400px] border-t border-border pt-3">
             <ReactQuill
               theme="snow"
               value={formData.body}
@@ -183,31 +185,30 @@ export default function BlogEditor() {
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
-          <input
-            type="checkbox"
-            id="published"
-            checked={formData.published}
-            onChange={(e) => setFormData({ ...formData, published: e.target.checked })}
-            className="h-4 w-4"
-          />
-          <Label htmlFor="published" className="font-mono cursor-pointer">
-            Publish immediately
-          </Label>
-        </div>
+        <div className="flex flex-wrap items-center justify-between gap-6 border-t border-border pt-8">
+          <label htmlFor="published" className="flex cursor-pointer items-center gap-3">
+            <input
+              type="checkbox"
+              id="published"
+              checked={formData.published}
+              onChange={(e) => setFormData({ ...formData, published: e.target.checked })}
+              className="h-4 w-4 accent-accent"
+            />
+            <span className={adminLabel}>Publish immediately</span>
+          </label>
 
-        <div className="flex flex-col-reverse sm:flex-row sm:items-center gap-3 sm:gap-4">
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => router.push('/admin/dashboard')}
-            className="w-full sm:w-auto"
-          >
-            Cancel
-          </Button>
-          <Button type="submit" disabled={loading} className="w-full sm:w-auto">
-            {loading ? 'Saving...' : id ? 'Update Post' : 'Create Post'}
-          </Button>
+          <div className="flex items-center gap-6">
+            <button
+              type="button"
+              onClick={() => router.push('/admin/dashboard')}
+              className={quietAction}
+            >
+              Cancel
+            </button>
+            <button type="submit" disabled={loading} className={primaryButton}>
+              {loading ? 'Saving…' : id ? 'Update post' : 'Create post'}
+            </button>
+          </div>
         </div>
       </form>
     </div>

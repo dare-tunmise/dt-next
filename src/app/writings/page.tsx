@@ -3,14 +3,15 @@ export const dynamic = 'force-dynamic';
 import { Metadata } from "next";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import BlogCard from "@/components/BlogCard";
+import IndexRow from "@/components/IndexRow";
 import { api, Blog } from "@/lib/api";
+import { sectionLabel, pageFrame, pageTitle, standfirst, formatDate } from "@/lib/typography";
 
 
 export const metadata: Metadata = {
   title: "Writings",
   description:
-    "Essays and writings by Dare Tunmise on software engineering, AI, language models, systems design, and the human side of building things.",
+    "Essays and writings by Dare Tunmise on software engineering, AI, language models, systems design, and the mundane.",
   keywords: [
     "Dare Tunmise writings",
     "Dare Tunmise essays",
@@ -20,6 +21,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "https://www.daretunmise.com/writings" },
   openGraph: {
+    siteName: "Dare Tunmise",
     title: "Writings | Dare Tunmise",
     description:
       "Essays and writings by Dare Tunmise on software engineering, AI, and systems design.",
@@ -45,9 +47,9 @@ const groupPostsByYear = (posts: Blog[]) => {
   }, {} as Record<number, Blog[]>);
 
   return Object.entries(grouped)
-    .map(([year, posts]) => ({ 
-      year: parseInt(year), 
-      posts 
+    .map(([year, posts]) => ({
+      year: parseInt(year),
+      posts
     }))
     .sort((a, b) => b.year - a.year);
 };
@@ -66,43 +68,38 @@ export default async function WritingsPage() {
   return (
     <div className="min-h-screen">
       <Header />
-      <main className="container mx-auto px-4 py-12 max-w-3xl">
-        <h1 className="text-4xl font-bold mb-8 border-b border-border pb-4">
-          All Writings
-        </h1>
-        
-        <div>
-          {writings.length > 0 ? (
-            groupPostsByYear(writings).map((yearGroup) => (
-              <div key={yearGroup.year} className="mb-12 last:mb-0">
-                <h2 className="text-3xl font-bold mb-6" style={{ color: '#e8dbc9' }}>
-                  {yearGroup.year}
-                </h2>
-                
-                <div className="space-y-6">
-                  {yearGroup.posts.map((writing) => (
-                    <BlogCard 
-                      key={writing._id}
-                      title={writing.title}
-                      // Clean up content for preview
-                      excerpt={writing.body.substring(0, 200).replace(/[#*`]/g, '') + '...'}
-                      slug={writing.slug}
-                      date={new Date(writing.date || '').toLocaleDateString('en-US', { 
-                        month: 'short', 
-                        day: 'numeric', 
-                        year: 'numeric' 
-                      })}
-                      readTime={writing.readTime || ''}
-                    />
-                  ))}
-                </div>
-              </div>
-            ))
-          ) : (
-            <p className="text-muted-foreground">No writings published yet.</p>
-          )}
+
+      <main className={`${pageFrame} pb-16`}>
+        <div className="mt-16 sm:mt-20">
+          <h1 className={pageTitle}>Writings</h1>
+          <p className={standfirst}>
+            Essays on software engineering, language models, and the mundane.
+          </p>
         </div>
+
+        {writings.length > 0 ? (
+          groupPostsByYear(writings).map((yearGroup) => (
+            <section key={yearGroup.year} className="mt-16 sm:mt-20">
+              <h2 className={sectionLabel}>{yearGroup.year}</h2>
+              <div className="mt-6 border-b border-border">
+                {yearGroup.posts.map((writing) => (
+                  <IndexRow
+                    key={writing._id}
+                    title={writing.title}
+                    href={`/writing/${writing.slug}`}
+                    meta={formatDate(writing.date)}
+                  />
+                ))}
+              </div>
+            </section>
+          ))
+        ) : (
+          <p className="mt-16 italic text-muted-foreground">
+            No writings published yet.
+          </p>
+        )}
       </main>
+
       <Footer />
     </div>
   );
