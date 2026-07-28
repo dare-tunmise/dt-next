@@ -3,7 +3,7 @@ import "./global.css";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { Metadata } from "next";
 
-const SITE_URL = "https://www.daretunmise.com";
+const SITE_URL = "https://daretunmise.com";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),

@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       disallow: '/admin/',
     },
-    sitemap: 'https://www.daretunmise.com/sitemap.xml',
+    sitemap: 'https://daretunmise.com/sitemap.xml',
   }
 }

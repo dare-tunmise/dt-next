@@ -10,13 +10,13 @@ export const metadata: Metadata = {
   title: { absolute: "Dare Tunmise — Software Engineer, Writer & Poet" },
   description:
     "Dare Tunmise is a software engineer, writer, and poet. Read essays, see backend & AI projects, and explore the poetry collection \"A Failed Attempt at Undoing Memories.\"",
-  alternates: { canonical: "https://www.daretunmise.com" },
+  alternates: { canonical: "https://daretunmise.com" },
   openGraph: {
     siteName: "Dare Tunmise",
     title: "Dare Tunmise — Software Engineer, Writer & Poet",
     description:
       "Essays, software projects, and the poetry collection \"A Failed Attempt at Undoing Memories.\"",
-    url: "https://www.daretunmise.com",
+    url: "https://daretunmise.com",
     type: "website",
     images: [{ url: "/og-image.jpg", width: 1200, height: 630, alt: "Dare Tunmise" }],
   },
@@ -36,12 +36,12 @@ const websiteSchema = {
   "@type": "WebSite",
   name: "Dare Tunmise",
   alternateName: "Dare Tunmise — Software Engineer, Writer & Poet",
-  url: "https://www.daretunmise.com",
+  url: "https://daretunmise.com",
   inLanguage: "en",
   author: {
     "@type": "Person",
     name: "Dare Tunmise",
-    url: "https://www.daretunmise.com",
+    url: "https://daretunmise.com",
   },
 };
 

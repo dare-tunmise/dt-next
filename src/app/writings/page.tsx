@@ -19,13 +19,13 @@ export const metadata: Metadata = {
     "AI essays",
     "writing",
   ],
-  alternates: { canonical: "https://www.daretunmise.com/writings" },
+  alternates: { canonical: "https://daretunmise.com/writings" },
   openGraph: {
     siteName: "Dare Tunmise",
     title: "Writings | Dare Tunmise",
     description:
       "Essays and writings by Dare Tunmise on software engineering, AI, and systems design.",
-    url: "https://www.daretunmise.com/writings",
+    url: "https://daretunmise.com/writings",
     type: "website",
     images: [{ url: "/og-image.jpg", width: 1200, height: 630, alt: "Writings by Dare Tunmise" }],
   },

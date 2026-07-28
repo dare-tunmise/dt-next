@@ -17,13 +17,13 @@ export const metadata: Metadata = {
     "Akashic Books",
     "poetry collection",
   ],
-  alternates: { canonical: "https://www.daretunmise.com/book" },
+  alternates: { canonical: "https://daretunmise.com/book" },
   openGraph: {
     siteName: "Dare Tunmise",
     title: "A Failed Attempt at Undoing Memories — Dare Tunmise",
     description:
       "A poetry collection by Dare Tunmise exploring memory's complexity and resilience. Selected and edited by Kwame Dawes and Chris Abani.",
-    url: "https://www.daretunmise.com/book",
+    url: "https://daretunmise.com/book",
     type: "book",
     images: [
       {

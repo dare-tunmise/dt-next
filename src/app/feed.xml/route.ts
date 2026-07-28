@@ -4,7 +4,7 @@ import { api, Blog } from '@/lib/api';
 // site's reads.
 export const dynamic = 'force-dynamic';
 
-const SITE_URL = 'https://www.daretunmise.com';
+const SITE_URL = 'https://daretunmise.com';
 
 const XML_ESCAPES: Record<string, string> = {
   '<': '&lt;',

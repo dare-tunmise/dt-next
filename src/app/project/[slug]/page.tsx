@@ -8,7 +8,7 @@ import { sentenceCase } from "@/lib/typography";
 import ViewTracker from "@/components/ViewTracker";
 import ProjectArticle from './ProjectArticle';
 
-const SITE_URL = "https://www.daretunmise.com";
+const SITE_URL = "https://daretunmise.com";
 
 type Props = {
   params: Promise<{ slug: string }>;
