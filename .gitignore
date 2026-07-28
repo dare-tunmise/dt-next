@@ -28,3 +28,6 @@ out/
 build
 *.local
 .env
+
+# TypeScript incremental build cache
+*.tsbuildinfo

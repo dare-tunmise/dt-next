@@ -13,6 +13,18 @@ export default {
       },
     },
     extend: {
+      fontFamily: {
+        // Old-style serif for the index layout. System stack on purpose —
+        // no webfont fetch, so it paints on first frame with no layout shift.
+        serif: [
+          '"Iowan Old Style"',
+          '"Palatino Linotype"',
+          'Palatino',
+          '"Book Antiqua"',
+          'Georgia',
+          'serif',
+        ],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

@@ -1,11 +1,12 @@
 import { Metadata } from "next";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { pageFrame, pageTitle, sectionLabel } from "@/lib/typography";
 
 export const metadata: Metadata = {
   title: "Book — A Failed Attempt at Undoing Memories",
   description:
-    "\"A Failed Attempt at Undoing Memories\" — a poetry collection by Dare Tunmise, edited by Kwame Dawes and Chris Abani, published by the African Poetry Book Fund and Akashic Books.",
+    "\"A Failed Attempt at Undoing Memories\" — a poetry collection by Dare Tunmise, selected and edited by Kwame Dawes and Chris Abani, published by the African Poetry Book Fund and Akashic Books.",
   keywords: [
     "Dare Tunmise",
     "A failed attempt at undoing memories",
@@ -18,9 +19,10 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "https://www.daretunmise.com/book" },
   openGraph: {
+    siteName: "Dare Tunmise",
     title: "A Failed Attempt at Undoing Memories — Dare Tunmise",
     description:
-      "A poetry collection by Dare Tunmise exploring memory's complexity and resilience. Edited by Kwame Dawes and Chris Abani.",
+      "A poetry collection by Dare Tunmise exploring memory's complexity and resilience. Selected and edited by Kwame Dawes and Chris Abani.",
     url: "https://www.daretunmise.com/book",
     type: "book",
     images: [
@@ -35,7 +37,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary",
     title: "A Failed Attempt at Undoing Memories — Dare Tunmise",
-    description: "Poetry by Dare Tunmise. Edited by Kwame Dawes and Chris Abani.",
+    description: "Poetry by Dare Tunmise. Selected and edited by Kwame Dawes and Chris Abani.",
     images: ["https://m.media-amazon.com/images/S/aplus-media-library-service-media/b6f4bccb-7e88-4b72-8835-1fcf2b2cf838.__CR0,0,300,300_PT0_SX300_V1___.jpg"],
   },
 };
@@ -45,57 +47,67 @@ const Book = () => {
   return (
     <div className="min-h-screen">
       <Header />
-      <main className="container mx-auto px-4 py-12 max-w-3xl">
-        <h1 className="text-4xl font-bold mb-12 text-center">
-          A failed attempt at undoing memories
-        </h1>
-        
-        <div className="max-w-md mx-auto mb-12">
-          <img 
-            src="https://m.media-amazon.com/images/S/aplus-media-library-service-media/b6f4bccb-7e88-4b72-8835-1fcf2b2cf838.__CR0,0,300,300_PT0_SX300_V1___.jpg" 
-            alt="A failed attempt at undoing memories - Book Cover"
-            className="w-full rounded-lg shadow-2xl"
+      <main className={`${pageFrame} pb-16`}>
+        <div className="mt-16 sm:mt-20">
+          <p className={sectionLabel}>Poetry</p>
+          <h1 className={`${pageTitle} mt-4`}>
+            A failed attempt at undoing memories
+          </h1>
+        </div>
+
+        {/* Cover sits beside the credits rather than above them. Rendered at
+            260px because the source is only 300px wide — any larger and it
+            upscales into softness. */}
+        <div className="mt-12 flex flex-col gap-10 sm:flex-row sm:items-start sm:gap-12">
+          <img
+            src="https://m.media-amazon.com/images/S/aplus-media-library-service-media/b6f4bccb-7e88-4b72-8835-1fcf2b2cf838.__CR0,0,300,300_PT0_SX300_V1___.jpg"
+            alt="A failed attempt at undoing memories — book cover"
+            width={300}
+            height={300}
+            className="w-full max-w-[260px] self-center rounded shadow-2xl sm:self-start"
           />
+
+          <dl className="flex-1 space-y-8">
+            <div>
+              <dt className={sectionLabel}>Selected and edited by</dt>
+              <dd className="mt-2 text-lg">Kwame Dawes and Chris Abani</dd>
+            </div>
+            <div>
+              <dt className={sectionLabel}>Published by</dt>
+              <dd className="mt-2 text-lg">
+                African Poetry Book Fund and Akashic Books
+              </dd>
+            </div>
+          </dl>
         </div>
 
-        <div className="text-center mb-8">
-          <p className="text-lg text-muted-foreground mb-2">
-            Edited by <span className="text-foreground font-semibold">Kwame Dawes</span> and <span className="text-foreground font-semibold">Chris Abani</span>
-          </p>
-          <p className="text-muted-foreground">
-            Published by <span className="text-foreground font-semibold">African Poetry Book Fund</span> and <span className="text-foreground font-semibold">Akashic Books</span>
-          </p>
-        </div>
+        {/* The blurb is the strongest thing on this page, so it gets the size. */}
+        <figure className="mt-16 border-t border-border pt-10 sm:mt-20">
+          <blockquote className="text-xl italic leading-relaxed sm:text-2xl">
+            “Tunmise writes in praise of memory’s complexity and resilience. He is
+            mindful of the ways in which memory stores and is the store; the ways in
+            which it is beholden to naming and ordering, as well as how it represents
+            reality.”
+          </blockquote>
+          <figcaption className={`${sectionLabel} mt-6`}>
+            Tjawangwa Dema, from the preface
+          </figcaption>
+        </figure>
 
-        <div className="prose prose-invert max-w-none mb-12">
-          <p className="text-lg leading-relaxed text-center">
-“Tunmise writes in praise of memory’s complexity and resilience. He is mindful of the ways in which memory stores and is the store; the ways in which it is beholden to naming and ordering, as well as how it represents reality.”
-
--Tjawangwa Dema
+        <section className="mt-16 border-t border-border pt-10 sm:mt-20">
+          <h2 className={sectionLabel}>Keep up</h2>
+          <p className="mt-4 leading-relaxed text-muted-foreground">
+            New writing goes out through the feed.
           </p>
-        </div>
-
-        <div className="bg-card p-8 rounded-lg border border-border">
-          <h2 className="text-2xl font-bold mb-4">Stay Updated</h2>
-          <p className="text-muted-foreground mb-6">
-            Subscribe to receive updates about new writings, projects, and book releases.
-          </p>
-          <form className="space-y-4">
-            <input 
-              type="email" 
-              placeholder="Your email address"
-              className="w-full px-4 py-3 bg-background border border-border rounded focus:outline-none focus:ring-2 focus:ring-accent"
-              required
-            />
-            <button 
-              type="submit"
-              className="w-full px-6 py-3 bg-accent text-accent-foreground font-semibold rounded hover:opacity-90 transition-opacity"
-            >
-              Subscribe
-            </button>
-          </form>
-        </div>
+          <a
+            href="/feed.xml"
+            className="mt-6 inline-block text-lg underline underline-offset-4 transition-colors hover:text-accent"
+          >
+            Subscribe via RSS →
+          </a>
+        </section>
       </main>
+      <Footer />
     </div>
   );
 };

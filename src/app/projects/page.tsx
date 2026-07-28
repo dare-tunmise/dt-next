@@ -1,8 +1,9 @@
 import { Metadata } from "next";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import ProjectCard from "@/components/ProjectCard";
+import IndexRow from "@/components/IndexRow";
 import { api, Blog } from "@/lib/api";
+import { pageFrame, pageTitle, standfirst, formatDate } from "@/lib/typography";
 
 export const metadata: Metadata = {
   title: "Projects",
@@ -17,6 +18,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "https://www.daretunmise.com/projects" },
   openGraph: {
+    siteName: "Dare Tunmise",
     title: "Projects | Dare Tunmise",
     description: "Backend systems, AI agents, and developer tools by Dare Tunmise.",
     url: "https://www.daretunmise.com/projects",
@@ -46,27 +48,33 @@ export default async function ProjectsPage() {
   return (
     <div className="min-h-screen">
       <Header />
-      <main className="container mx-auto px-4 py-12 max-w-3xl">
-        <h1 className="text-4xl font-bold mb-8 border-b border-border pb-4">
-          All Projects
-        </h1>
-        
-        <div className="space-y-8">
+
+      <main className={`${pageFrame} pb-16`}>
+        <div className="mt-16 sm:mt-20">
+          <h1 className={pageTitle}>Projects</h1>
+          <p className={standfirst}>
+            Backend systems, AI agents, and developer tools.
+          </p>
+        </div>
+
+        <div className="mt-16 border-b border-border sm:mt-20">
           {projects.length > 0 ? (
             projects.map((project) => (
-              <ProjectCard 
+              <IndexRow
                 key={project._id}
                 title={project.title}
-                // Cleaning the string for the preview
-                excerpt={project.body.substring(0, 200).replace(/[#*`]/g, '') + '...'}
-                slug={project.slug}
+                href={`/project/${project.slug}`}
+                meta={formatDate(project.date)}
               />
             ))
           ) : (
-            <p className="text-muted-foreground">No projects published yet.</p>
+            <p className="border-t border-border py-5 italic text-muted-foreground">
+              No projects published yet.
+            </p>
           )}
         </div>
       </main>
+
       <Footer />
     </div>
   );

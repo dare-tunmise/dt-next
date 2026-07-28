@@ -45,6 +45,44 @@ interface CreateBlogData {
   published?: boolean;
 }
 
+interface AnalyticsTotals {
+  views: number;
+  visitors: number;
+  engaged: number;
+  lastViewedAt?: string | null;
+}
+
+interface AnalyticsPost {
+  _id: string;
+  title: string;
+  slug: string;
+  category: 'writings' | 'projects';
+  published: boolean;
+  views: number;
+  visitors: number;
+  engaged: number;
+  lastViewedAt: string | null;
+}
+
+interface AnalyticsSummary {
+  posts: AnalyticsPost[];
+  totals: AnalyticsTotals;
+}
+
+interface BreakdownItem {
+  name: string;
+  count: number;
+}
+
+interface BlogAnalytics {
+  blog: Pick<Blog, 'title' | 'slug' | 'category' | 'published' | 'date'>;
+  totals: AnalyticsTotals;
+  series: { date: string; views: number; visitors: number }[];
+  countries: BreakdownItem[];
+  referrers: BreakdownItem[];
+  devices: BreakdownItem[];
+}
+
 interface UpdateBlogData {
   title?: string;
   body?: string;
@@ -172,8 +210,51 @@ export const api = {
       }
       return response.json();
     },
+    getAnalytics: async (): Promise<AnalyticsSummary> => {
+      const response = await fetch(`${API_BASE_URL}/api/dashboard/analytics`, {
+        credentials: 'include',
+      });
+      if (!response.ok) throw new Error('Failed to fetch analytics');
+      return response.json();
+    },
+    getBlogAnalytics: async (id: string): Promise<BlogAnalytics> => {
+      const response = await fetch(`${API_BASE_URL}/api/dashboard/analytics/${id}`, {
+        credentials: 'include',
+      });
+      if (!response.ok) throw new Error('Failed to fetch analytics');
+      return response.json();
+    },
+  },
+
+  // Analytics beacons (public, fire-and-forget)
+  analytics: {
+    // The Referer on this POST would be the post page itself, so the original
+    // referrer is passed explicitly in the body.
+    recordView: (slug: string) => beacon('/api/views', slug),
+    recordEngaged: (slug: string) => beacon('/api/views/engage', slug),
   },
 };
 
+// Analytics must never surface an error to a reader, so this swallows
+// everything. keepalive lets it survive a navigation away from the page.
+const beacon = (path: string, slug: string) => {
+  try {
+    void fetch(`${API_BASE_URL}${path}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        slug,
+        referrer: typeof document !== 'undefined' ? document.referrer : undefined,
+      }),
+      keepalive: true,
+    }).catch(() => {});
+  } catch {
+    /* never break the page for analytics */
+  }
+};
+
 // Export types for use in components
-export type { User, Blog, BlogsResponse, CreateBlogData, UpdateBlogData };
+export type {
+  User, Blog, BlogsResponse, CreateBlogData, UpdateBlogData,
+  AnalyticsSummary, BlogAnalytics, AnalyticsPost, BreakdownItem,
+};

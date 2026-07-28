@@ -3,8 +3,9 @@
 import { useEffect } from 'react';
 // 1. Change the import to next/navigation
 import { useRouter } from 'next/navigation'; 
+import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
-import { Button } from '@/components/ui/button';
+import { primaryButton } from '@/lib/adminStyles';
 
 export default function Login() {
   const { user, login, loading } = useAuth();
@@ -18,20 +19,28 @@ export default function Login() {
   }, [user, loading, router]);
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-4">
-      <div className="max-w-md w-full space-y-8">
-        <div className="text-center">
-          <h1 className="text-4xl font-bold text-foreground font-mono mb-2">Admin Login</h1>
-          <p className="text-muted-foreground">Sign in to manage your content</p>
+    <div className="flex min-h-screen items-center justify-center bg-background p-6 font-mono">
+      <div className="w-full max-w-sm">
+        <p className="text-sm uppercase tracking-[0.2em] text-muted-foreground">
+          dare tunmise.
+        </p>
+        <h1 className="mt-6 text-2xl text-foreground">Sign in</h1>
+        <p className="mt-2 text-sm text-muted-foreground">
+          This area is restricted to the site owner.
+        </p>
+
+        <div className="mt-10 border-t border-border pt-8">
+          <button type="button" onClick={login} className={`${primaryButton} w-full`}>
+            Continue with Google
+          </button>
         </div>
-        
-        <Button 
-          onClick={login}
-          className="w-full"
-          size="lg"
+
+        <Link
+          href="/"
+          className="mt-8 inline-block text-xs uppercase tracking-[0.15em] text-muted-foreground transition-colors hover:text-accent"
         >
-          Sign in with Google
-        </Button>
+          ← Back to site
+        </Link>
       </div>
     </div>
   );

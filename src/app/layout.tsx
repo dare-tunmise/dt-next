@@ -96,14 +96,9 @@ const personSchema = {
   ],
 };
 
-const websiteSchema = {
-  "@context": "https://schema.org",
-  "@type": "WebSite",
-  name: "Dare Tunmise",
-  url: SITE_URL,
-  inLanguage: "en",
-  author: { "@type": "Person", name: "Dare Tunmise", url: SITE_URL },
-};
+// NOTE: the WebSite schema lives on the home page, not here. Google reads the
+// site name from home-page markup only, and repeating it on every route makes
+// it a weaker signal rather than a stronger one.
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -113,9 +108,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema) }}
         />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+        {/* Declared here rather than via metadata.alternates.types: every page
+            sets its own `alternates.canonical`, and Next replaces that object
+            wholesale instead of merging, which drops the feed link. */}
+        <link
+          rel="alternate"
+          type="application/rss+xml"
+          title="Dare Tunmise"
+          href="/feed.xml"
         />
       </head>
       <body>
