@@ -7,6 +7,12 @@ interface User {
   avatar?: string;
 }
 
+/** Minimal shape returned for a neighbouring post. */
+interface PostLink {
+  title: string;
+  slug: string;
+}
+
 interface Blog {
   _id?: string;
   title: string;
@@ -24,6 +30,10 @@ interface Blog {
   };
   createdAt?: string;
   updatedAt?: string;
+  // Same-category neighbours, only present on the single-post endpoint.
+  // prev is older, next is newer.
+  prev?: PostLink | null;
+  next?: PostLink | null;
 }
 
 interface BlogsResponse {
@@ -269,6 +279,6 @@ const beacon = (path: string, slug: string) => {
 
 // Export types for use in components
 export type {
-  User, Blog, BlogsResponse, CreateBlogData, UpdateBlogData,
+  User, Blog, PostLink, BlogsResponse, CreateBlogData, UpdateBlogData,
   AnalyticsSummary, BlogAnalytics, AnalyticsPost, BreakdownItem,
 };

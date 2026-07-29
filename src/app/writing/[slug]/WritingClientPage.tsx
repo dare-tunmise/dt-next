@@ -5,7 +5,9 @@ import Link from 'next/link';
 import Script from 'next/script';
 import { Blog } from "@/lib/api";
 import { cleanPostHtml } from "@/lib/html";
+import { sectionLabel } from "@/lib/typography";
 import Footer from "@/components/Footer";
+import PostNav from "@/components/PostNav";
 
 declare global {
   interface Window {
@@ -90,9 +92,11 @@ const WritingClientPage = ({ post }: Props) => {
           />
         </div>
 
-        <div className="mt-16 pt-8 border-t border-border">
-          <Link href={`/writings`} className="text-accent hover:underline">
-            ← Back to writings
+        <PostNav prev={post.prev} next={post.next} basePath="writing" />
+
+        <div className="mt-10">
+          <Link href={`/writings`} className={sectionLabel}>
+            All writings
           </Link>
         </div>
       </main>
