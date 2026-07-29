@@ -1,4 +1,5 @@
 import { api, Blog } from '@/lib/api';
+import { cleanPostHtml } from '@/lib/html';
 
 // The feed reflects whatever is published right now, same as the rest of the
 // site's reads.
@@ -29,6 +30,9 @@ const toPlainText = (html = '') =>
 // Quill base64-encodes pasted images straight into the body, and one post
 // carries ~1.5MB that way. Readers poll hourly and can't use an inline blob
 // anyway, so drop those; hosted images pass through untouched.
+//
+// Runs BEFORE cleanPostHtml, so a paragraph that held nothing but an inline
+// image is left empty and then removed rather than shipping as a blank <p>.
 const stripDataImages = (html = '') =>
   html.replace(/<img[^>]+src=["']data:[^"']*["'][^>]*>/gi, '');
 
@@ -45,7 +49,7 @@ const itemFor = (post: Blog) => {
       <pubDate>${published.toUTCString()}</pubDate>
       <category>${escapeXml(post.category)}</category>
       <description>${escapeXml(summary)}${summary.length === 300 ? '…' : ''}</description>
-      <content:encoded><![CDATA[${stripDataImages(post.body).replace(/]]>/g, ']]&gt;')}]]></content:encoded>
+      <content:encoded><![CDATA[${cleanPostHtml(stripDataImages(post.body)).replace(/]]>/g, ']]&gt;')}]]></content:encoded>
     </item>`;
 };
 
