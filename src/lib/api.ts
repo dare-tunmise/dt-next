@@ -7,6 +7,12 @@ interface User {
   avatar?: string;
 }
 
+/** Minimal shape returned for a neighbouring post. */
+interface PostLink {
+  title: string;
+  slug: string;
+}
+
 interface Blog {
   _id?: string;
   title: string;
@@ -24,6 +30,10 @@ interface Blog {
   };
   createdAt?: string;
   updatedAt?: string;
+  // Same-category neighbours, only present on the single-post endpoint.
+  // prev is older, next is newer.
+  prev?: PostLink | null;
+  next?: PostLink | null;
 }
 
 interface BlogsResponse {
@@ -117,12 +127,26 @@ export const api = {
 
   // Public blogs
   blogs: {
-    getAll: async (category?: string, page = 1, limit = 10): Promise<BlogsResponse> => {
+    // Pass `revalidate` (seconds) for callers that would rather be cached than
+    // instantaneous — the RSS feed, which readers poll on a schedule. Without
+    // it the fetch is no-store, which forces the calling route to be dynamic
+    // and prevents any CDN caching.
+    getAll: async (
+      category?: string,
+      page = 1,
+      limit = 10,
+      opts?: { revalidate?: number }
+    ): Promise<BlogsResponse> => {
       let url = `${API_BASE_URL}/api/blogs?page=${page}&limit=${limit}`;
       if (category) {
         url += `&category=${category}`;
       }
-      const response = await fetch(url, { cache: 'no-store' });
+      const response = await fetch(
+        url,
+        opts?.revalidate
+          ? { next: { revalidate: opts.revalidate } }
+          : { cache: 'no-store' }
+      );
       if (!response.ok) throw new Error('Failed to fetch blogs');
       return response.json();
     },
@@ -255,6 +279,6 @@ const beacon = (path: string, slug: string) => {
 
 // Export types for use in components
 export type {
-  User, Blog, BlogsResponse, CreateBlogData, UpdateBlogData,
+  User, Blog, PostLink, BlogsResponse, CreateBlogData, UpdateBlogData,
   AnalyticsSummary, BlogAnalytics, AnalyticsPost, BreakdownItem,
 };

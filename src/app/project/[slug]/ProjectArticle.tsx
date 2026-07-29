@@ -1,7 +1,9 @@
 import Link from "next/link";
 import { Blog } from "@/lib/api";
 import { cleanPostHtml } from "@/lib/html";
+import { sectionLabel } from "@/lib/typography";
 import Footer from "@/components/Footer";
+import PostNav from "@/components/PostNav";
 
 interface Props {
   post: Blog;
@@ -45,12 +47,11 @@ const ProjectArticle = ({ post }: Props) => {
           />
         </article>
 
-        <div className="mt-16 pt-8 border-t border-border">
-          <Link
-            href="/projects"
-            className="text-accent hover:underline"
-          >
-            ← Back to projects
+        <PostNav prev={post.prev} next={post.next} basePath="project" />
+
+        <div className="mt-10">
+          <Link href="/projects" className={sectionLabel}>
+            All projects
           </Link>
         </div>
       </main>

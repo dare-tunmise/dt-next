@@ -1,8 +1,14 @@
+import { createHash } from 'crypto';
 import { api, Blog } from '@/lib/api';
+import { cleanPostHtml } from '@/lib/html';
 
-// The feed reflects whatever is published right now, same as the rest of the
-// site's reads.
-export const dynamic = 'force-dynamic';
+// Regenerate at most once an hour. Readers poll on their own schedule (15
+// minutes to a few hours), so a fresher feed than this buys nothing, while
+// force-dynamic meant every poll from every reader ran the route, called the
+// API and hit MongoDB. An hour's staleness is invisible to a feed reader.
+export const revalidate = 3600;
+
+const REVALIDATE_SECONDS = 3600;
 
 const SITE_URL = 'https://daretunmise.com';
 
@@ -29,6 +35,9 @@ const toPlainText = (html = '') =>
 // Quill base64-encodes pasted images straight into the body, and one post
 // carries ~1.5MB that way. Readers poll hourly and can't use an inline blob
 // anyway, so drop those; hosted images pass through untouched.
+//
+// Runs BEFORE cleanPostHtml, so a paragraph that held nothing but an inline
+// image is left empty and then removed rather than shipping as a blank <p>.
 const stripDataImages = (html = '') =>
   html.replace(/<img[^>]+src=["']data:[^"']*["'][^>]*>/gi, '');
 
@@ -45,7 +54,7 @@ const itemFor = (post: Blog) => {
       <pubDate>${published.toUTCString()}</pubDate>
       <category>${escapeXml(post.category)}</category>
       <description>${escapeXml(summary)}${summary.length === 300 ? '…' : ''}</description>
-      <content:encoded><![CDATA[${stripDataImages(post.body).replace(/]]>/g, ']]&gt;')}]]></content:encoded>
+      <content:encoded><![CDATA[${cleanPostHtml(stripDataImages(post.body)).replace(/]]>/g, ']]&gt;')}]]></content:encoded>
     </item>`;
 };
 
@@ -53,7 +62,9 @@ export async function GET() {
   let posts: Blog[] = [];
   try {
     // getAll returns published posts only, already newest first.
-    const data = await api.blogs.getAll(undefined, 1, 50);
+    const data = await api.blogs.getAll(undefined, 1, 50, {
+      revalidate: REVALIDATE_SECONDS,
+    });
     posts = data.blogs || [];
   } catch (error) {
     // An empty feed is better than a 500 — readers back off on errors.
@@ -76,8 +87,15 @@ ${posts.map(itemFor).join('\n')}
   return new Response(xml, {
     headers: {
       'Content-Type': 'application/rss+xml; charset=utf-8',
-      // Readers poll often; let a CDN absorb it.
-      'Cache-Control': 'public, max-age=0, s-maxage=3600',
+      // Gives the CDN something to answer conditional polls against, so a
+      // reader whose copy is current gets a 304 instead of 60KB. Deliberately
+      // not reading If-None-Match here — touching the request would opt this
+      // route out of static generation and undo the caching above.
+      ETag: `"${createHash('sha1').update(xml).digest('base64url')}"`,
+      // s-maxage lets the CDN serve polls without invoking the function;
+      // stale-while-revalidate means the one request that arrives after
+      // expiry still gets an instant answer while the feed rebuilds behind it.
+      'Cache-Control': `public, max-age=0, s-maxage=${REVALIDATE_SECONDS}, stale-while-revalidate=86400`,
     },
   });
 }
