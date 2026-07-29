@@ -1,13 +1,19 @@
 import { MetadataRoute } from 'next'
 import { api } from '@/lib/api' // Import your API instance
 
+// Crawlers fetch this occasionally and it only needs to be roughly current, but
+// the fetch below pulls 100 posts with their full bodies — including the ~1.5MB
+// of inline base64 in one of them — purely to emit a list of URLs. Cached for
+// an hour so a crawler hitting it repeatedly doesn't re-pay that each time.
+export const revalidate = 3600;
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://daretunmise.com';
 
   // 1. Fetch all blogs/projects from your backend
   let blogEntries: MetadataRoute.Sitemap = [];
   try {
-    const response = await api.blogs.getAll(undefined, 1, 100);  // Or whatever your public fetch is
+    const response = await api.blogs.getAll(undefined, 1, 100, { revalidate: 3600 });
     const blogs = response.blogs;
 
     blogEntries = blogs.map((post: any) => ({
