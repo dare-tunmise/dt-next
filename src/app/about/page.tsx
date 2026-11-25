@@ -4,24 +4,28 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { pageFrame, pageTitle, sectionLabel } from "@/lib/typography";
 
+// This is an identity page, not a pitch. The description and keywords name who
+// he is and what he has built, so the snippet matches what a reader actually
+// finds here — the previous copy advertised availability for work that the page
+// no longer offers.
 export const metadata: Metadata = {
   title: "About",
   description:
-    "Dare Tunmise — software engineer and writer. Backend services, system architecture, and AI features in production. Available for AI and automation work.",
+    "Dare Tunmise — software engineer and writer. Backend engineering, cloud infrastructure and applied AI at Vamoos; co-founder of Slategraph; poet.",
   keywords: [
     "Dare Tunmise",
     "about Dare Tunmise",
-    "AI engineer for hire",
-    "backend engineer",
-    "AI consultant",
-    "LLM engineer",
+    "Dare Tunmise engineer",
+    "Dare Tunmise poet",
+    "Slategraph",
+    "software engineer and writer",
   ],
   alternates: { canonical: "https://daretunmise.com/about" },
   openGraph: {
     siteName: "Dare Tunmise",
     title: "About Dare Tunmise",
     description:
-      "Software engineer and writer. Backend services, system architecture, and AI features in production.",
+      "Software engineer and writer. Backend engineering, cloud infrastructure and applied AI at Vamoos; co-founder of Slategraph; poet.",
     url: "https://daretunmise.com/about",
     type: "profile",
     images: [
@@ -36,7 +40,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "About Dare Tunmise",
-    description: "Software engineer and writer. Backend, systems, and AI features in production.",
+    description: "Software engineer and writer. Backend, cloud infrastructure and applied AI. Co-founder of Slategraph.",
     creator: "@Dare_Tunmise",
     images: ["/og-image.jpg"],
   },
