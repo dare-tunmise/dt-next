@@ -1,3 +1,8 @@
+// The index lists change only when a post is published, so they are cached and
+// refreshed hourly instead of re-queried per request. Previously no-store, which
+// made every crawl a full origin round-trip.
+export const revalidate = 3600;
+
 import { Metadata } from "next";
 import Link from 'next/link';
 import Header from "@/components/Header";
@@ -52,8 +57,8 @@ export default async function Index() {
   try {
     // Fetch data directly on server
     const [writingsData, projectsData] = await Promise.all([
-      api.blogs.getByCategory('writings', 1, 6),
-      api.blogs.getByCategory('projects', 1, 4)
+      api.blogs.getByCategory('writings', 1, 6, { revalidate: 3600 }),
+      api.blogs.getByCategory('projects', 1, 4, { revalidate: 3600 })
     ]);
 
     recentWritings = writingsData.blogs || [];

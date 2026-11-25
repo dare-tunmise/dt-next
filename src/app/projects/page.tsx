@@ -1,3 +1,8 @@
+// The index lists change only when a post is published, so they are cached and
+// refreshed hourly instead of re-queried per request. Previously no-store, which
+// made every crawl a full origin round-trip.
+export const revalidate = 3600;
+
 import { Metadata } from "next";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -39,7 +44,7 @@ export default async function ProjectsPage() {
 
   try {
     // Direct server-side fetch
-    const data = await api.blogs.getByCategory('projects', 1, 50);
+    const data = await api.blogs.getByCategory('projects', 1, 50, { revalidate: 3600 });
     projects = data.blogs || [];
   } catch (error) {
     console.error('Failed to load projects:', error);

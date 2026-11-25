@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { pageFrame, pageTitle } from "@/lib/typography";
+import { pageFrame, pageTitle, sectionLabel } from "@/lib/typography";
 
 export const metadata: Metadata = {
   title: "About",
@@ -52,93 +52,83 @@ const About = () => {
         </h1>
 
         <div className="prose prose-invert max-w-none">
-          <p className="text-lg leading-relaxed mb-6">Hi, </p>
           <p className="text-lg leading-relaxed mb-6">
-            I’m Dare Tunmise — a software engineer and writer.
+            I’m a software engineer and writer. I work across backend engineering, cloud infrastructure and applied AI, building products and the systems behind them.
           </p>
 
           <p className="leading-relaxed mb-6">
-            I currently work with a London-based travel-tech company, where I work on backend services, system architecture, cloud run applications and AI-powered features used in production. Most of my work centers on understanding how large language models behave under real-world constraints and using that understanding to solve practical problems for teams and businesses.
+            I work at Vamoos, a London-based travel technology company, where I’ve built and worked on products including TripImport, Qtango and Imsert.
           </p>
 
           <p className="leading-relaxed mb-6">
-            Outside work, I write. I’m the author of{" "}
+            I’m also a co-founder of{" "}
+            <a href="https://slategraph.com/" className="text-accent hover:underline">
+              Slategraph
+            </a>
+            , alongside{" "}
+            <a href="https://immanuelcaspian.com/" className="text-accent hover:underline">
+              Kolapo Immanuel
+            </a>
+            . Slategraph is an AI startup building autonomous agents for marketing teams. I also volunteer engineering time at{" "}
+            <a href="https://findr.ng/" className="text-accent hover:underline">
+              Findr
+            </a>
+            , a platform for reporting and locating missing persons in Nigeria.
+          </p>
+
+          <p className="leading-relaxed mb-6">
+            I studied Political Science at the University of Ibadan.
+          </p>
+
+          <p className="leading-relaxed mb-6">
+            I write poetry and essays. My collection,{" "}
             <Link href="/book" className="text-accent hover:underline">
               <em>A Failed Attempt at Undoing Memories</em>
             </Link>
-            , a poetry collection published by the African Poetry Book Fund and Akashic Books. I write essays too — most of them end up{" "}
+            , was selected by Kwame Dawes and Chris Abani for the African Poetry Book Fund and published by Akashic Books, New York, in 2024. I publish essays and other writing{" "}
             <Link href="/writings" className="text-accent hover:underline">
               here
             </Link>
             .
           </p>
 
-          <h2 className="text-2xl font-bold mb-4 mt-12">What I Do</h2>
-
-          <p className="leading-relaxed mb-6">I collaborate with companies and startups that want to integrate AI into their daily operations — whether that’s:</p>
-          <ul className="space-y-4">
-            <li className="flex items-start">
-              <span className="flex h-2 w-2 mt-2 rounded-full bg-blue-500 mr-3"></span>
-              <span className="leading-relaxed">building custom AI agents</span>
-            </li>
-            <li className="flex items-start">
-              <span className="flex h-2 w-2 mt-2 rounded-full bg-blue-500 mr-3"></span>
-              <span className="leading-relaxed">automating internal workflows</span>
-            </li>
-            <li className="flex items-start">
-              <span className="flex h-2 w-2 mt-2 rounded-full bg-blue-500 mr-3"></span>
-              <span className="leading-relaxed">developing AI-powered dashboards and tooling</span>
-            </li>
-            <li className="flex items-start">
-            <span className="flex h-2 w-2 mt-2 rounded-full bg-blue-500 mr-3"></span>
-            <span className="leading-relaxed">structuring documents, conversations, and knowledge into actionable insights</span>
-            </li>
-          </ul>
-
-          <p className="leading-relaxed mt-4 mb-6">
-            Project engagements typically start at $5,000, with smaller Discovery/PoC phases beginning at $3,000 depending on scope and timeline.
-          </p>
-
-          <h2 className="text-2xl font-bold mb-4 mt-12">Get in Touch</h2>
-
-          <p className="leading-relaxed mb-4">
-            If you’d like to discuss a project or have something in mind, feel free to reach out.
-          </p>
-
-          <ul className="list-none pl-0 space-y-2 mb-8">
-            <li>
-              <a
-                href="mailto:hello@daretunmise.com"
-                className="text-accent hover:underline"
-              >
-                Email: hello@daretunmise.com
-              </a>
-            </li>
-            <li>
-              <a
-                href="https://x.com/Dare_Tunmise"
-                className="text-accent hover:underline"
-              >
-                Twitter: @daretunmise
-              </a>
-            </li>
-            <li>
-              <a
-                href="https://www.linkedin.com/in/dare-tunmise-47524519a/"
-                className="text-accent hover:underline"
-              >
-                Linkedin: @daretunmise
-              </a>
-            </li>
-            <li>
-              <a
-                href="https://github.com/dare-tunmise"
-                className="text-accent hover:underline"
-              >
-                GitHub: @dare-tunmise
-              </a>
-            </li>
-          </ul>
+          <section className="mt-12 border-t border-border pt-8">
+            <h2 className={sectionLabel}>Elsewhere</h2>
+            <ul className="mt-6 list-none pl-0 space-y-2">
+              <li>
+                <a
+                  href="mailto:hello@daretunmise.com"
+                  className="text-accent hover:underline"
+                >
+                  Email: hello@daretunmise.com
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://x.com/Dare_Tunmise"
+                  className="text-accent hover:underline"
+                >
+                  X: @Dare_Tunmise
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://www.linkedin.com/in/dare-tunmise-47524519a/"
+                  className="text-accent hover:underline"
+                >
+                  LinkedIn: @daretunmise
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://github.com/dare-tunmise"
+                  className="text-accent hover:underline"
+                >
+                  GitHub: @dare-tunmise
+                </a>
+              </li>
+            </ul>
+          </section>
         </div>
       </main>
     <Footer />

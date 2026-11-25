@@ -1,9 +1,16 @@
-export const dynamic = 'force-dynamic';
+// Posts change rarely, so they are prerendered at build and refreshed hourly
+// rather than rebuilt per request. force-dynamic meant x-vercel-cache: MISS on
+// every hit and a full Railway + Mongo round-trip for each crawl.
+export const revalidate = 3600;
+
+// A slug published after the last build still renders on demand, then joins the
+// cache. Without this, a new post would 404 until the next deploy.
+export const dynamicParams = true;
 
 import { cache } from 'react';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { api } from "@/lib/api";
+import { api, ApiError } from "@/lib/api";
 import { sentenceCase } from "@/lib/typography";
 import ViewTracker from "@/components/ViewTracker";
 import ProjectArticle from './ProjectArticle';
@@ -16,7 +23,9 @@ type Props = {
 
 // generateMetadata and the page body both need the post. cache() dedupes them
 // into a single request-scoped fetch instead of hitting the API twice.
-const getPost = cache((slug: string) => api.blogs.getBySlug(slug));
+const getPost = cache((slug: string) =>
+  api.blogs.getBySlug(slug, { revalidate: 3600 })
+);
 
 // Bodies are Quill HTML with long runs of &nbsp;. Stripping tags alone leaves
 // those entities as literal text in the meta description and JSON-LD, so decode
@@ -32,6 +41,21 @@ const toDescription = (body: string) =>
     .replace(/\s+/g, ' ')
     .trim()
     .substring(0, 160);
+
+// Prerenders every project at build time so a crawler is served from the CDN
+// instead of waking the API. A build-time API failure returns [] rather than
+// failing the deploy — the pages then render on demand, as they did before.
+export async function generateStaticParams() {
+  try {
+    const response = await api.blogs.getAll(undefined, 1, 100, { revalidate: 3600 });
+    return (response.blogs || [])
+      .filter((post: any) => post.category === 'projects')
+      .map((post: any) => ({ slug: post.slug }));
+  } catch (error) {
+    console.error('generateStaticParams: could not list projects', error);
+    return [];
+  }
+}
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
@@ -68,7 +92,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       },
     };
   } catch (error) {
-    return { title: "Project Not Found" };
+    // Only a genuine 404 is a missing project. Anything else is an outage, and
+    // must not be described to a crawler as a page that does not exist.
+    if (error instanceof ApiError && error.status === 404) {
+      return { title: "Project Not Found" };
+    }
+    throw error;
   }
 }
 
@@ -78,9 +107,15 @@ export default async function Page({ params }: Props) {
   let post;
   try {
     post = await getPost(slug);
-  } catch {
-    // Real 404 status rather than a 200 page that says "not found".
-    notFound();
+  } catch (error) {
+    // Real 404 status rather than a 200 page that says "not found" — but ONLY
+    // when the API actually said 404. An unreachable API rethrows, which Next
+    // serves as a 5xx: Google retries a 5xx and keeps the URL, whereas a 404
+    // tells it the essay is gone and the URL gets dropped from the index.
+    if (error instanceof ApiError && error.status === 404) {
+      notFound();
+    }
+    throw error;
   }
 
   const articleSchema = {
