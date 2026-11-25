@@ -1,5 +1,20 @@
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL
 
+/**
+ * Carries the HTTP status so callers can tell "this post does not exist" from
+ * "the API did not answer". A page that renders notFound() on both reports a
+ * 404 to crawlers for a live post whenever the API blips, and Google drops the
+ * URL from its index. Anything that is not a 404 must surface as a 5xx.
+ */
+export class ApiError extends Error {
+  status: number;
+  constructor(status: number, message: string) {
+    super(message);
+    this.name = 'ApiError';
+    this.status = status;
+  }
+}
+
 interface User {
   id: string;
   name: string;
@@ -102,6 +117,123 @@ interface UpdateBlogData {
   published?: boolean;
 }
 
+// --- Research (SEC EDGAR) ---------------------------------------------------
+
+/** One reported figure. `source` and `asOf` are always present by construction. */
+interface FactPoint {
+  value: number;
+  unit: string;
+  periodStart: string | null;
+  periodEnd: string;
+  fiscalYear: number | null;
+  fiscalPeriod: string | null;
+  form: string | null;
+  filed: string | null;
+  accession: string | null;
+  /** Link to the filing this number came from. */
+  source: string;
+  asOf: string;
+}
+
+interface Metric {
+  label: string;
+  tag: string;
+  unit: string;
+  kind: 'duration' | 'instant';
+  annual: FactPoint[];
+  quarterly: FactPoint[];
+  alternateTags?: string[];
+  /** Company stopped reporting this line item — value is historical, not current. */
+  stale?: boolean;
+  staleNote?: string;
+}
+
+/** A figure lifted from an XBRL frame, cited back to its filing. */
+interface ScreenFact {
+  value: number;
+  periodStart: string | null;
+  periodEnd: string;
+  accession: string;
+  tag: string;
+  source: string;
+  asOf: string;
+}
+
+interface ScreenCandidate {
+  cik: string;
+  ticker: string;
+  name: string;
+  exchange: string | null;
+  location: string | null;
+  revenue: { current: ScreenFact; prior: ScreenFact; growth: number };
+  netIncome: ScreenFact | null;
+  netMargin: number | null;
+  operatingIncome: ScreenFact | null;
+  operatingMargin: number | null;
+  operatingCashFlow: ScreenFact | null;
+  stockholdersEquity: ScreenFact;
+  debt: {
+    longTerm: ScreenFact | null;
+    shortTerm: ScreenFact | null;
+    total: number;
+    toEquity: number;
+    /** False means no debt tag was filed at all — i.e. genuinely none. */
+    reported: boolean;
+  };
+}
+
+interface ScreenResult {
+  criteria: {
+    minRevenueGrowth: number;
+    requireProfitable: boolean;
+    requireOperatingProfit: boolean;
+    maxDebtToEquity: number;
+    minRevenue: number;
+    maxRevenue: number;
+    limit: number;
+  };
+  period: { current: string; prior: string };
+  /** What each rule removed — a screen with 3 results is unreadable without it. */
+  funnel: Record<string, number>;
+  matched: number;
+  sizeFilter: { type: string; note: string; maxRevenue: number };
+  candidates: ScreenCandidate[];
+  generatedAt: string;
+}
+
+interface CompanyResearch {
+  profile: {
+    ticker: string;
+    cik: string;
+    name: string;
+    exchange: string | null;
+    sic: string | null;
+    sicDescription: string | null;
+    fiscalYearEnd: string | null;
+    stateOfIncorporation: string | null;
+    formerNames: string[];
+    source: string;
+  };
+  fundamentals: {
+    ticker: string;
+    entityName: string;
+    metrics: Record<string, Metric>;
+    missing: string[];
+    retrievedAt: string;
+  };
+  filings: {
+    count: number;
+    filings: Array<{
+      accession: string;
+      form: string | null;
+      filingDate: string | null;
+      items: string | null;
+      indexUrl: string;
+      documentUrl: string | null;
+    }>;
+  };
+}
+
 export const api = {
   // Auth
   auth: {
@@ -128,9 +260,10 @@ export const api = {
   // Public blogs
   blogs: {
     // Pass `revalidate` (seconds) for callers that would rather be cached than
-    // instantaneous — the RSS feed, which readers poll on a schedule. Without
-    // it the fetch is no-store, which forces the calling route to be dynamic
-    // and prevents any CDN caching.
+    // instantaneous — the RSS feed, the sitemap, and every public page a
+    // crawler reads. Without it the fetch is no-store, which forces the calling
+    // route to be dynamic and prevents any CDN caching, so Googlebot pays a
+    // full origin round-trip on every single crawl.
     getAll: async (
       category?: string,
       page = 1,
@@ -150,14 +283,34 @@ export const api = {
       if (!response.ok) throw new Error('Failed to fetch blogs');
       return response.json();
     },
-    getBySlug: async (slug: string): Promise<Blog> => {
-      const response = await fetch(`${API_BASE_URL}/api/blogs/${slug}`, { cache: 'no-store' });
-      if (!response.ok) throw new Error('Blog not found');
+    getBySlug: async (slug: string, opts?: { revalidate?: number }): Promise<Blog> => {
+      const response = await fetch(
+        `${API_BASE_URL}/api/blogs/${slug}`,
+        opts?.revalidate
+          ? { next: { revalidate: opts.revalidate } }
+          : { cache: 'no-store' }
+      );
+      if (!response.ok) {
+        throw new ApiError(
+          response.status,
+          response.status === 404
+            ? `No post with slug "${slug}"`
+            : `Blog fetch failed for "${slug}" (HTTP ${response.status})`
+        );
+      }
       return response.json();
     },
-    getByCategory: async (category: string, page = 1, limit = 10): Promise<BlogsResponse> => {
+    getByCategory: async (
+      category: string,
+      page = 1,
+      limit = 10,
+      opts?: { revalidate?: number }
+    ): Promise<BlogsResponse> => {
       const response = await fetch(
-        `${API_BASE_URL}/api/blogs/category/${category}?page=${page}&limit=${limit}`, { cache: 'no-store' }
+        `${API_BASE_URL}/api/blogs/category/${category}?page=${page}&limit=${limit}`,
+        opts?.revalidate
+          ? { next: { revalidate: opts.revalidate } }
+          : { cache: 'no-store' }
       );
       if (!response.ok) throw new Error('Failed to fetch blogs');
       return response.json();
@@ -167,6 +320,36 @@ export const api = {
         `${API_BASE_URL}/api/blogs?search=${encodeURIComponent(searchTerm)}&page=${page}&limit=${limit}`
       );
       if (!response.ok) throw new Error('Failed to search blogs');
+      return response.json();
+    },
+  },
+
+  // Research (protected) — live company data from SEC EDGAR
+  research: {
+    /** Cold run takes ~9s; frames are cached server-side for 12h after that. */
+    screen: async (params?: Record<string, string | number | boolean>): Promise<ScreenResult> => {
+      const query = new URLSearchParams(
+        Object.entries(params || {}).map(([k, v]) => [k, String(v)])
+      ).toString();
+      const response = await fetch(
+        `${API_BASE_URL}/api/research/screen${query ? `?${query}` : ''}`,
+        { credentials: 'include' }
+      );
+      if (!response.ok) {
+        const error = await response.json().catch(() => ({}));
+        throw new Error(error.error || 'Screen failed');
+      }
+      return response.json();
+    },
+    getCompany: async (ticker: string): Promise<CompanyResearch> => {
+      const response = await fetch(
+        `${API_BASE_URL}/api/research/company/${encodeURIComponent(ticker)}`,
+        { credentials: 'include' }
+      );
+      if (!response.ok) {
+        const error = await response.json().catch(() => ({}));
+        throw new Error(error.error || `Lookup failed for ${ticker}`);
+      }
       return response.json();
     },
   },
@@ -281,4 +464,6 @@ const beacon = (path: string, slug: string) => {
 export type {
   User, Blog, PostLink, BlogsResponse, CreateBlogData, UpdateBlogData,
   AnalyticsSummary, BlogAnalytics, AnalyticsPost, BreakdownItem,
+  CompanyResearch, Metric, FactPoint,
+  ScreenResult, ScreenCandidate, ScreenFact,
 };

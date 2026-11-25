@@ -1,4 +1,8 @@
-export const dynamic = 'force-dynamic';
+// The index lists change only when a post is published, so they are cached and
+// refreshed hourly instead of re-queried per request. Previously no-store, which
+// made every crawl a full origin round-trip.
+export const revalidate = 3600;
+
 
 import { Metadata } from "next";
 import Header from "@/components/Header";
@@ -59,7 +63,7 @@ export default async function WritingsPage() {
   // Data is fetched directly on the server during request time
   let writings: Blog[] = [];
   try {
-    const data = await api.blogs.getByCategory('writings', 1, 50);
+    const data = await api.blogs.getByCategory('writings', 1, 50, { revalidate: 3600 });
     writings = data.blogs || [];
   } catch (error) {
     console.error('Failed to load writings:', error);
